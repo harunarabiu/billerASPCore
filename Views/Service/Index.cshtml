@@ -1,0 +1,411 @@
+﻿@inject FirstApp.Models.TextFormatting Format
+@model IEnumerable<FirstApp.Models.Service>
+@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+@{
+    Layout = "_Dashboard";
+}
+
+
+@section Style {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bulma.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <style>
+        .pagination-link.is-current {
+            background-color: #3E4095 !important;
+            color: #fff;
+        }
+
+        .fa {
+            color: #3E4095 !important;
+        }
+
+        #filter {
+            padding-right: 2px;
+        }
+    </style>
+}
+
+<nav class="breadcrumb is-small" aria-label="breadcrumbs">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li class="is-active"><a href="#" aria-current="page">Services</a></li>
+    </ul>
+</nav>
+
+@*<div class="level mt-2 mr-2 content-title">
+    <div class="level-left">
+        <div class="level-item">
+            <div class="title has-text-primary">
+
+                <span>Services</span>
+            </div>
+        </div>
+    </div>
+    <div class="level-right">
+        <div class="level-item">
+            <a class="button is-primary is-small">
+                <span class="icon is-small"> <i class="fa fa-plus"></i> </span><span>Add New </span>
+            </a>
+        </div>
+    </div>
+</div>*@
+
+
+<div class="columns is-multiline">
+    <div class="column">
+
+
+
+        @*<table class="table is-bordered is-striped is-narrow is-fullwidth mt-4">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Service Name</th>
+                    <th>Service ID</th>
+                    <th>Service Type</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var service in Model)
+                {
+                    <tr>
+                        <td> @service.Id</td>
+                        <td> @service.Name</td>
+                        <td>@service.Key</td>
+
+                        <td>@service.ServiceType.Name</td>
+                        <td><span class="tag is-info">@service.Status active</span></td>
+                        <td>@Format.ReadableDate(service.CreatedAt)</td>
+
+                        <td>
+                            <a class="button is-primary is-small">
+                                <span class="icon is-small"> <i class="fa fa-edit"></i> </span><span>Edit</span>
+                            </a>
+                            <a class="button is-danger is-small">
+                                <span class="icon is-small"> <i class="fa fa-trash"></i> </span><span>Delete</span>
+                            </a>
+                        </td>
+                    </tr>
+
+                }
+
+            </tbody>
+        </table>
+        <br>
+        <br>*@
+
+
+        @*Service*@
+
+        <div class="level mt-2 mr-2 content-title">
+            <div class="level-left">
+                <div class="level-item">
+                    <div class="title is-4 has-text-primary">
+
+                        <span>Services</span>
+                    </div>
+                </div>
+            </div>
+            <div class="level-right">
+                <div class="level-item">
+                    <a class="button is-primary is-small">
+                        <span class="icon is-small"> <i class="fa fa-plus"></i> </span><span>Add New </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-datatable">
+            <div class="card-table">
+                <div class="content">
+                    <table id="services" class="table is-striped is-fullwidth">
+                        <thead>
+
+                            <tr>
+                                <th>Name</th>
+                                <th>ID</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <br>
+
+
+        @*Service Plans*@
+
+        <div class="level mt-2 mr-2 content-title">
+            <div class="level-left">
+                <div class="level-item">
+                    <div class="title is-4 has-text-primary">
+
+                        <span>Service plans</span>
+                    </div>
+                </div>
+            </div>
+            <div class="level-right">
+                <div class="level-item">
+                    <a class="button is-primary is-small">
+                        <span class="icon is-small"> <i class="fa fa-plus"></i> </span><span>Add New </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-datatable">
+            <div class="card-table">
+                <div class="content">
+                    <table id="serviceplan" class="table is-striped is-fullwidth">
+                        <thead>
+
+                            <tr>
+                                <th>Name</th>
+                                <th>Service</th>
+                                <th>Type</th>
+                                <th>Price</th>
+                                <th>Default</th>
+                                <th>Status</th>
+                                <th>Commission</th>
+                                <th>Service Fee</th>
+                                <th>Action</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <br>
+
+
+
+        @*Payment Plans*@
+        <div class="level mt-2 mr-2 content-title">
+            <div class="level-left">
+                <div class="level-item">
+                    <div class="title is-4 has-text-primary">
+
+                        <span>Payment Plans</span>
+                    </div>
+                </div>
+            </div>
+            <div class="level-right">
+                <div class="level-item">
+                    <a class="button is-primary is-small">
+                        <span class="icon is-small"> <i class="fa fa-plus"></i> </span><span>Add New </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-datatable">
+            <div class="card-table">
+                <div class="content">
+                    <table id="paymentplan" class="table is-striped is-fullwidth">
+                        <thead>
+
+                            <tr>
+                                <th>Name</th>
+                                <th>Service</th>
+                                <th>Service Plan</th>
+                                <th>Default</th>
+                                <th>Status</th>
+                                <th>Commission</th>
+                                <th>Service Fee</th>
+                                <th>Action</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+@section Script {
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bulma.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+    <script>
+
+
+        var table = $('#services').DataTable({
+
+            ajax: {
+                url: '/services/data',
+                dataSrc: 'data'
+            },
+            "columns": [
+                { "data": "name" },
+                { "data": "key" },
+                { "data": "serviceType.name" },
+                {
+
+                    "mData": "status",
+                    "mRender": function (data, type, row) {
+                        if (data == "Active") {
+                            return '<span class="tag is-primary">' + data + '</span>'
+                        } else {
+                            return '<span class="tag is-danger">' + data + '</span>'
+                        }
+
+                    }
+                },
+                {
+                    "mData": "id",
+                    "mRender": function (data, type, row) {
+                        return '<a href="/services/' + data + '"><span class="tag is-black">View</span></a>'
+                    }
+                }
+
+            ],
+        });
+
+
+        var table = $('#serviceplan').DataTable({
+
+            ajax: {
+                url: '/services/plan/data',
+                dataSrc: 'data'
+            },
+            "columns": [
+                { "data": "name" },
+                { "data": "service.name" },
+                { "data": "service.serviceType.name" },
+                { "data": "price" },
+                { "data": "isDefault" },
+                {
+
+                    "mData": "status",
+                    "mRender": function (data, type, row) {
+                        if (data == "Active") {
+                            return '<span class="tag is-primary">' + data + '</span>'
+                        } else {
+                            return '<span class="tag is-danger">' + data + '</span>'
+                        }
+
+                    }
+                },
+                { "data": "commission" },
+                { "data": "convienceFee" },
+                {
+                    "mData": "id",
+                    "mRender": function (data, type, row) {
+                        return '<a href="/services/plan/' + data + '"><span class="tag is-black">View</span></a>'
+                    }
+                }
+
+            ],
+        });
+
+
+        var table = $('#paymentplan').DataTable({
+
+            ajax: {
+                url: '/services/payment/plan/data',
+                dataSrc: 'data'
+            },
+            "columns": [
+                { "data": "name" },
+                { "data": "servicePlan.service.name" },
+                { "data": "servicePlan.name" },
+                { "data": "isDefault" },
+                {
+
+                    "mData": "status",
+                    "mRender": function (data, type, row) {
+                        if (data == "Active") {
+                            return '<span class="tag is-primary">' + data + '</span>'
+                        } else {
+                            return '<span class="tag is-danger">' + data + '</span>'
+                        }
+
+                    }
+                },
+                { "data": "commission" },
+                { "data": "convienceFee" },
+                {
+                    "mData": "id",
+                    "mRender": function (data, type, row) {
+                        return '<a href="/services/payment/plan/' + data + '"><span class="tag is-black">View</span></a>'
+                    }
+                }
+
+            ],
+        });
+
+        
+
+    </script>
+
+}
+
+@*<section>
+        <h1><a href="@Url.Action("Index","Home")" title="@Model.Name">@Model.Name < /a></h1>
+        <h3>@Model.Key</h3>
+        <h3>@Model.Active</h3>
+        <h3>@Model.ServiceType</h3>
+        <h3>@Format.ReadableDate(Model.CreatedAt)</h3>
+    </section>*@

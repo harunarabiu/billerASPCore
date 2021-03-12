@@ -1,0 +1,99 @@
+﻿@model IEnumerable<FirstApp.Models.Transaction>
+
+@*@await (Component.InvokeAsync<FirstApp.ViewComponents.Statistics>())*@
+
+@{
+
+    var completedTransactionsToday = Model.Where(x => x.Status == "Success").Count();
+    var completedTransactionsYesterday = Model.Where(x => x.Status == "Success" && x.CreatedAt.Day == DateTime.Now.AddDays(-1).Day).Count();
+    var completedTransactionsCurrentMonth = Model.Where(x => x.Status == "Success" && x.CreatedAt.Month == DateTime.Now.Month).Count();
+    var completedTransactionsLastMonth = Model.Where(x => x.Status == "Success" && x.CreatedAt.Month == DateTime.Now.AddMonths(-1).Month).Count();
+
+
+    var failedTransactions = Model.Where(x => x.Status == "Failed").Count();
+    var pendingTransactions = Model.Where(x => x.Status == "Pending").Count();
+   
+    
+}
+
+<div class="columns is-multiline">
+    <div class="column">
+        <div class="box notification is-primary">
+            <div class="level">
+                <div class="">
+                    <div class="heading">Completed Transctions</div>
+                    <div class="title is-5">@string.Format("{0:N0}", completedTransactionsToday)</div>
+                </div>
+               
+            </div>
+            <div class="level">
+
+                <div class="">
+                    <div class="heading">This Month</div>
+                    <div class="title is-5">@string.Format("{0:N0}", completedTransactionsCurrentMonth)</div>
+                </div>
+                <div class="">
+                    <div class="heading">Last Month</div>
+                    <div class="title is-5">@string.Format("{0:N0}", completedTransactionsLastMonth)</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <div class="box notification is-warning">
+            <div class="level">
+                <div class="">
+                    <div class="heading">Failed Transactions </div>
+                    <div class="title is-5">@string.Format("{0:N0}", failedTransactions)</div>
+                </div>
+                @*<div class="">
+                    <div class="heading">Pending</div>
+                    <div class="title is-5">@string.Format("{0:N0}", pendingTransactions)</div>
+                </div>*@
+            </div>
+            <div class="level">
+
+                <div class="">
+                    @*<div class="heading">This Month</div>
+        <div class="title is-5">@</div>*@
+                    <div class="heading">Pending</div>
+                    <div class="title is-5">@string.Format("{0:N0}", pendingTransactions)</div>
+                </div>
+                <div class="">
+                    @*<div class="heading">Last Month</div>
+        <div class="title is-5">@string.Format("{0:N}", 0)</div>*@
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <div class="box notification is-info">
+            <div class="level">
+                <div class="">
+                    <div class="heading">Commission</div>
+                    <div class="title is-5">0</div>
+                </div>
+                @*<div class="">
+                    <div class="heading">Yesterday</div>
+                    <div class="title is-5">@string.Format("{0:N}", amountReceivableYesterday)</div>
+                </div>*@
+            </div>
+            <div class="level">
+
+                @*<div class="">
+                    <div class="heading">This Month</div>
+                    <div class="title is-5">@string.Format("{0:N}", amountReceivable)</div>
+                </div>
+                <div class="">
+                    <div class="heading">Last Month</div>
+                    <div class="title is-5">@string.Format("{0:N}", 0)</div>
+                </div>*@
+
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,10 @@
+﻿@model IEnumerable<FirstApp.Models.Transaction>
+
+@section Title {
+    <title>Biller.ng</title>
+}
+
+@foreach (var transaction in Model)
+{
+    @await Html.PartialAsync("_Transaction", transaction)
+}

@@ -1,0 +1,15 @@
+﻿@model FirstApp.Models.Account.CreateUserViewModel
+@{
+    Layout = "_Dashboard";
+}
+
+@section Title {
+    <title>Account - @Model.FirstName @Model.LastName</title>
+}
+<h1>Account</h1>
+<ul>
+    <li>@Model.Username</li>
+    <li>@Model.FirstName</li>
+    <li>@Model.LastName</li>
+    <li>@Model.Email</li>
+</ul>

@@ -1,0 +1,220 @@
+﻿@model IEnumerable<FirstApp.Models.ApplicationUser>
+
+
+@{
+
+    Layout = "_Dashboard";
+}
+
+@section Title {
+    <title>Biller.ng - User Accounts </title>
+}
+
+
+@section Style {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bulma.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <style>
+        .pagination-link.is-current {
+            background-color: #3E4095 !important;
+            color: #fff;
+        }
+
+        .fa {
+            color: #3E4095 !important;
+        }
+
+        #filter {
+            padding-right: 2px;
+        }
+    </style>
+}
+
+
+<nav class="breadcrumb is-small" aria-label="breadcrumbs">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li class="is-active"><a href="#" aria-current="page">Account</a></li>
+    </ul>
+</nav>
+
+<div class="level mt-2 mr-2 content-title">
+    <div class="level-left">
+        <div class="level-item">
+            <div class="title has-text-primary">
+                <span>Accounts</span>
+            </div>
+        </div>
+    </div>
+    <div class="level-right">
+        <div class="level-item">
+            <a href="@Url.Action("Create","Account")" class="button is-primary">
+                <span class="icon is-small"> <i class="fa fa-plus"></i> </span><span>Add New </span>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<div class="columns is-multiline">
+    <div class="column">
+
+
+
+
+
+        <div class="card card-datatable">
+            <div class="card-table">
+                <div class="content">
+                    <table id="users" class="table is-striped is-fullwidth">
+                        <thead>
+
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>UserName</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Status</th>
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <br>
+
+        @*<nav class="pagination is-centered" role="navigation" aria-label="pagination">
+                <a class="pagination-previous">Previous</a>
+                <a class="pagination-next">Next page</a>
+                <ul class="pagination-list">
+                    <li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
+                    <li><span class="pagination-ellipsis">…</span></li>
+                    <li><a class="pagination-link" aria-label="Goto page 45">2</a></li>
+                    <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">3</a></li>
+                    <li><a class="pagination-link" aria-label="Goto page 47">4</a></li>
+                    <li><span class="pagination-ellipsis">…</span></li>
+                    <li><a class="pagination-link" aria-label="Goto page 86">6</a></li>
+                </ul>
+            </nav>*@
+    </div>
+</div>
+
+@section Script {
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bulma.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+    <script>
+
+            var table = $('#users').DataTable({
+
+                ajax: {
+                    url: '/account/users/data',
+                    dataSrc: 'data'
+                },
+                "columns": [
+                    { "data": "firstName" },
+                    { "data": "lastName" },
+                    { "data": "userName" },
+                    { "data": "email" },
+                    { "data": "phoneNumber" },
+                    {
+
+                        "mData": "status",
+                        "mRender": function (data, type, row) {
+                            if (data == "Active") {
+                                return '<span class="tag is-primary">' + data + '</span>'
+                            } else {
+                                return '<span class="tag is-danger">' + data + '</span>'
+                            }
+
+                        }
+                    },
+                    {
+                        "mData": "id",
+                        "mRender": function (data, type, row) {
+                            return '<a href="/account/users/' + data + '"><span class="tag is-black">View</span></a>'
+                        }
+                    }
+
+                ],
+            });
+
+
+
+                //JSON data
+                @*var dataType = 'application/json; charset=utf-8';
+                var data = {
+                    "transactionReference": "MNFY|20200900003149|000000",
+                    "paymentReference": "MNFY|20200900003149|000000",
+                    "amountPaid": "180000.00",
+                    "totalPayable": "180000.00",
+                    "settlementAmount": "179989.25",
+                    "paidOn": "09/09/2020 11:31:56 AM",
+                    "paymentStatus": "PAID",
+                    "paymentDescription": "Ojinaka Daniel",
+                    "transactionHash": "a294a0bfxxxxxxxxxxxxxxxxxxxx0b399cf077e30cf2ad54a7da9e17583deb5130286e6bb5dxxxx353f027725b83fcafac02d2e181f53edd5f",
+                    "currency": "NGN",
+                    "paymentMethod": "ACCOUNT_TRANSFER",
+                    "product": {
+                    "type": "RESERVED_ACCOUNT",
+                        "reference": "7b3xxxx072a44axxxxxxx2b6c2374458"
+                    },
+                    "cardDetails": null,
+                    "accountDetails": {
+                    "accountName": "John Ciroma Abuh",
+                        "accountNumber": "******4872",
+                        "bankCode": "000015",
+                        "amountPaid": "180000.00"
+                    },
+                    "accountPayments": [
+                        {
+                    "accountName": "John Ciroma Abuh",
+                            "accountNumber": "******4872",
+                            "bankCode": "000015",
+                            "amountPaid": "180000.00"
+                        }
+                    ],
+                    "customer": {
+                    "email": "dojinaka@monnify.com",
+                        "name": "Daniel Ojinaka"
+                    }
+                }
+
+                console.log('Submitting form...');
+                $.ajax({
+                    type: 'POST',
+                    url: '/transactions/webhook/bank/transfers',
+                    dataType: 'json',
+                    contentType: dataType,
+                    data: data,
+                    success: function (result) {
+                    console.log('Data received: ');
+                        console.log(result);
+                    }
+                });*@
+    </script>
+
+
+}

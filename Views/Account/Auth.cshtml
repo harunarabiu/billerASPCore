@@ -1,0 +1,38 @@
+﻿@model FirstApp.Models.Account.LoginViewModel
+@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+@{
+    Layout = "_Layout";
+}
+
+@section Title {
+    <title>Biller.ng - Login </title>
+}
+
+<section>
+    <fieldset>
+        <div asp-validation-summary="ModelOnly" class="Error"></div>
+        <form role="form" asp-action="Auth" asp-controller="Account">
+            <p>
+                    <label asp-for="Username"></label>
+                    <input asp-for="Username" class="form-control" placeholder="username" />
+                    <span asp-validation-for="Username"></span>
+                </p>
+
+            @*<p>
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" placeholder="Email" />
+                <span asp-validation-for="Email"></span>
+            </p>*@
+            <p>
+                <label asp-for="Password"></label>
+                <input asp-for="Password" class="form-control" type="password" placeholder="Password" />
+                <span asp-validation-for="Password"></span>
+            </p>
+
+            <p>
+                <button type="submit"> Submit </button>
+            </p>
+        </form>
+
+    </fieldset>
+</section>

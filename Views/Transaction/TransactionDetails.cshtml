@@ -1,0 +1,162 @@
+﻿@model FirstApp.Models.ViewModels.KEDCOTransactionVM
+
+@{
+    Layout = "_Dashboard";
+}
+@section Title {
+    <title>Biller.ng</title>
+}
+@section style {
+    <style>
+        .footer-logo {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+}
+<nav class="breadcrumb is-small" aria-label="breadcrumbs">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li class="is-active"><a href="#" aria-current="page">Transaction</a></li>
+    </ul>
+</nav>
+
+<div class="level mt-2 mr-2 content-title">
+    <div class="level-left">
+        <div class="level-item">
+            <div class="title has-text-primary">
+
+                <span>Transaction Details</span>
+            </div>
+        </div>
+    </div>
+    <div class="level-right">
+        <div class="level-item">
+            @*<button type="button" class="button is-small">March 8, 2017 - April 6, 2017</button>*@
+        </div>
+    </div>
+</div>
+
+<div class="columns">
+    <div class="column">
+
+    </div>
+    <div class="column is-three-fifths">
+
+        @*<a class="button is-link">
+            <span class="icon is-small"> <i class="fa fa-plus"></i> </span><span>Add New </span>
+        </a>*@
+
+
+        <div class="card events-card">
+            <header class="card-header">
+            </header>
+            <div class="card-table">
+                <div class="content">
+
+                    <table class="table is-fullwidth is-striped">
+                        <tbody>
+                            <tr>
+                                <td width="30%">Service Name</td>
+                                <td class="has-text-right"> @Model.Service.Name</td>
+                            </tr>
+                            <tr>
+                                <td width="30%">Service Type</td>
+                                <td class="has-text-right">@Model.Service.ServiceType.Name</td>
+                            </tr>
+                            <tr>
+                                <td width="30%">Customer Name</td>
+                                <td class="has-text-right">@Model.CustomerName</td>
+                            </tr>
+                            <tr>
+                                <td width="30%">Account Number</td>
+                                <td class="has-text-right">@Model.AccountNumber</td>
+                            </tr>
+                            <tr>
+                                <td width="30%">Address</td>
+                                <td class="has-text-right" id="address">
+                                    @Model.Address
+                                </td>
+                            </tr>
+                            @if (Model.PaymentPlan.Key == "prepaid")
+                            {
+                                <tr>
+                                    <td width="30%">Meter Number</td>
+                                    <td class="has-text-right">@Model.MeterNumber</td>
+                                </tr>
+                                <tr>
+                                    <td width="30%">Recharge Token</td>
+                                    <td class="has-text-right"><b>@Model.RechargeToken</b></td>
+                                </tr>
+                            }
+
+
+
+                            <tr>
+                                <td width="30%">Tariff Plan</td>
+                                <td class="has-text-right" id="tariff">@Model.TariffPlan</td>
+                            </tr>
+                            <tr>
+                                <td width="30%">Tariff Class</td>
+                                <td class="has-text-right" id="tariffclass">@Model.TariffClass</td>
+                            </tr>
+                            <tr>
+                                <td width="30%">Customer Arrears </td>
+                                <td class="has-text-right" id="arrears">@Model.Arrears</td>
+                            </tr>
+                            <tr>
+                                <td width="30%">Payment Plan</td>
+                                <td class="has-text-right">
+                                    @Model.PaymentPlan.Name
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td width="30%">Transaction ID</td>
+                                <td class="has-text-right">@Model.TransactionRef</td>
+                            </tr>
+                            <tr>
+                                <td width="30%">Status</td>
+                                <td class="has-text-right">@Model.TransactionStatus</td>
+                            </tr>
+                            <tr>
+                                <td width="30%">Transaction Date </td>
+                                <td class="has-text-right">@Model.CreatedAt.ToString("dd/MM/yyyy h:mm tt")</td>
+                            </tr>
+
+                            <tr>
+                                <td width="30%">Amount</td>
+                                <td class="has-text-right">
+                                    ₦@Model.Amount
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="30%">Convenience Fee</td>
+                                <td class="has-text-right">₦@Model.ServiceFee</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <footer class="card-footer">
+                </footer>
+
+            </div>
+
+        </div>
+        @if (Model.TransactionStatus == "Success")
+        {
+            <div class="footer-logo">
+                <a href="@Url.Action("Index","receipt", new { TransactionId = Model.TransactionRef })" class="button is-primary is-fullwidth"> Download</a>
+            </div>
+        }
+
+    </div>
+
+    <div class="column">
+
+    </div>
+</div>
+
+

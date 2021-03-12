@@ -1,0 +1,226 @@
+﻿@model FirstApp.Models.ViewModels.KEDCOTransactionVM
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Biller Receipt</title>
+    <style>
+        .rcontainer {
+            margin: auto;
+            width: auto;
+            padding-left: 10%;
+            padding-right: 10%;
+            font-size: 1em;
+            font-weight: 400;
+            line-height: 1.5;
+            font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+        }
+
+        .columns {
+            display: flex;
+        }
+
+        .column {
+            display: block;
+            flex-basis: 0;
+            flex-grow: 1;
+            flex-shrink: 1;
+            padding: .75rem;
+        }
+
+        .has-text-centered {
+            text-align: center !important;
+        }
+
+
+        .header-logo {
+            text-align: center;
+        }
+
+        .footer-logo {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .header-logo > img {
+            width: 200px;
+        }
+
+        .footer-logo > img {
+            width: 150px;
+        }
+
+        .has-text-right {
+            text-align: right !important;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: .45rem;
+            box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+            color: #4a4a4a;
+            max-width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-header {
+            background-color: transparent;
+            align-items: stretch;
+            box-shadow: 0 0.125em 0.25em rgba(10, 10, 10, .1);
+            display: flex;
+        }
+
+        .table.is-fullwidth {
+            width: 100%;
+        }
+
+        .table {
+            background-color: #fff;
+            color: #363636;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        .table.is-striped tbody tr:not(.is-selected):nth-child(even) {
+            background-color: #e0e8f9 !important;
+        }
+
+        tr {
+            display: table-row;
+            vertical-align: inherit;
+            border-color: inherit;
+        }
+
+        .content table td,
+        .content table th {
+            padding: .5em .75em;
+            vertical-align: top;
+        }
+    </style>
+</head>
+
+<body>
+    @*<section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column"></div>
+                <div class="column">*@
+                    <div class="rcontainer">
+                        <div class="card events-card">
+                            <header class="card-header">
+                            </header>
+                            <div class="card-table">
+                                <div class="content">
+                                    <div class="header-logo">
+                                        <img src="http://34.201.200.131/img/kedco_logo.png" alt="KEDCO Logo" />
+                                    </div>
+                                    <h3 class="has-text-centered subtitle">Transaction Receipt</h3>
+                                    <table class="table is-fullwidth is-striped">
+                                        <tbody>
+                                            <tr>
+                                                <td width="30%">Service Name</td>
+                                                <td class="has-text-right"> @Model.Service.Name</td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%">Service Type</td>
+                                                <td class="has-text-right">@Model.Service.ServiceType.Name</td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%">Customer Name</td>
+                                                <td class="has-text-right">@Model.CustomerName</td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%">Account Number</td>
+                                                <td class="has-text-right">@Model.AccountNumber</td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%">Address</td>
+                                                <td class="has-text-right" id="address">
+                                                    @Model.Address
+                                                </td>
+                                            </tr>
+                                            @if (Model.PaymentPlan.Key == "prepaid")
+                                            {
+                                                <tr>
+                                                    <td width="30%">Meter Number</td>
+                                                    <td class="has-text-right">@Model.MeterNumber</td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="30%">Recharge Token</td>
+                                                    <td class="has-text-right"><b>@Model.RechargeToken</b></td>
+                                                </tr>
+                                            }
+
+
+                                            <tr>
+                                                <td width="30%">Tariff Plan</td>
+                                                <td class="has-text-right" id="tariff">@Model.TariffPlan</td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%">Tariff Class</td>
+                                                <td class="has-text-right" id="tariffclass">@Model.TariffClass</td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%">Customer Arrears </td>
+                                                <td class="has-text-right" id="arrears">@Model.Arrears</td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%">Payment Plan</td>
+                                                <td class="has-text-right">
+                                                    @Model.PaymentPlan.Name
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td width="30%">Transaction ID</td>
+                                                <td class="has-text-right">@Model.TransactionRef</td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%">Status</td>
+                                                <td class="has-text-right">@Model.TransactionStatus</td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%">Transaction Date </td>
+                                                <td class="has-text-right">@Model.CreatedAt.ToString("dd/MM/yyyy h:mm tt")</td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%">Amount</td>
+                                                <td class="has-text-right">
+                                                    ₦@Model.Amount
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%">Convenience Fee</td>
+                                                <td class="has-text-right">₦@Model.ServiceFee</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                                <footer class="card-footer">
+                                </footer>
+
+                            </div>
+
+                            <div class="footer-logo">
+                                <p>Powered by Biller.ng</p>
+                                <img src="http://34.201.200.131/img/logo.png" alt="Biller.ng Logo" />
+                            </div>
+                        </div>
+
+                    </div>
+                @*</div>
+                <div class="column"></div>
+            </div>
+        </div>
+    </section>*@
+</body>
+
+</html>

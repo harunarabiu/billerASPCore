@@ -1,0 +1,196 @@
+﻿@model FirstApp.Models.ViewModels.AccountBalanceVM
+
+@{
+
+    Layout = "_Dashboard";
+}
+
+@section Title {
+    <title>Biller.ng - User Accounts </title>
+}
+
+@section Style {
+<style>
+    .modal-card-head {
+        background-color: #fff;
+        border-bottom: 0
+    }
+    .modal-card-foot {
+        background-color: #fff;
+        border-top: 0;
+    }
+</style>
+}
+
+
+<nav class="breadcrumb is-small" aria-label="breadcrumbs">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li class="is-active"><a href="#" aria-current="page">Account</a></li>
+    </ul>
+</nav>
+
+<div class="level mt-2 mr-2 content-title">
+    <div class="level-left">
+        <div class="level-item">
+            <div class="title has-text-primary">
+                <span>Accounts</span>
+            </div>
+        </div>
+    </div>
+    <div class="level-right">
+        <div class="level-item">
+            <button type="button" class="button is-small">March 8, 2017 - April 6, 2017</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="columns is-multiline">
+    <div class="column">
+
+        <div class="columns is-multiline">
+            <div class="column">
+                <div class="box notification is-primary">
+                    <div class="level">
+                        <div class="">
+                            <div class="heading">Available Balance</div>
+                            <div class="title is-5">₦@Model.Wallet?.Balance</div>
+                        </div>
+                        <div class="">
+                            <div class="heading">Book Balance</div>
+                            <div class="title is-5">₦@Model.Wallet?.BookBalance</div>
+                        </div>
+                    </div>
+                    <div class="level">
+
+                       
+
+                        <div class="">
+                            <button class="button" onclick="showModal('paymentDetails')">Fund Wallet</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="box">
+                    @if (Model.BankAccount == null || string.IsNullOrEmpty(Model.BankAccount?.AccountNumber))
+                    {
+                    <div class="has-text-centered">
+                        <p>You don't have a Bank Account Yet.</p>
+                        <button class="button is-primary mt-4" onclick="showModal('CreateBankAccount')">Create Bank Account</button>
+                    </div>
+                        
+                    }
+                    else
+                    {
+                        <div class="level">
+                            <div class="">
+                                <div class="heading">Bank Account</div>
+                                <div class="title is-5">@Model.BankAccount?.BankName</div>
+                            </div>
+
+                        </div>
+                        <div class="level">
+
+                            <div class="">
+                                <div class="heading">Account Number</div>
+                                <div class="title is-5">@Model.BankAccount?.AccountNumber</div>
+                            </div>
+                            <div class="">
+                                <div class="heading">Account Name</div>
+                                <div class="title is-5">@Model.BankAccount?.AccountName</div>
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            </div>
+            @*<div class="column">
+                    <div class="box notification is-info">
+                        <div class="level">
+                            <div class="">
+                                <div class="heading">Account Receive</div>
+                                <div class="title is-5">@string.Format("{0:N}", amountReceivableToday)</div>
+                            </div>
+                            <div class="">
+                                <div class="heading">Yesterday</div>
+                                <div class="title is-5">@string.Format("{0:N}", amountReceivableYesterday)</div>
+                            </div>
+                        </div>
+                        <div class="level">
+
+                            <div class="">
+                                <div class="heading">This Month</div>
+                                <div class="title is-5">@string.Format("{0:N}", amountReceivable)</div>
+                            </div>
+                            <div class="">
+                                <div class="heading">Last Month</div>
+                                <div class="title is-5">@string.Format("{0:N}", 0)</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>*@
+
+        </div>
+
+    </div>
+</div>
+
+<div class="modal" id="paymentDetails">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <button class="delete is-pulled-right" aria-label="close" onclick="hideModal('paymentDetails')"></button>
+        </header>
+        <section class="modal-card-body">
+           To fund your wallet, make a Bank Transfer to the Bank Account on your wallet.
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-primary is-pulled-right" onclick="hideModal('paymentDetails')">Close</button>
+        </footer>
+    </div>
+</div>
+
+<div class="modal" id="CreateBankAccount">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <button class="delete is-pulled-right" aria-label="close" onclick="hideModal('CreateBankAccount')"></button>
+        </header>
+        <section class="modal-card-body">
+            <form role="form" action="/account/bank/create" method="post">
+
+                <div class="field">
+                    <label class="label"></label>
+                    <div class="control">
+                        <input name="BVN" id="BVN" class="input" placeholder="Enter your 11 digit BVN">
+                    </div>
+                    <button class="button is-pulled-right">Submit</button>
+                </div>
+
+            </form>
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-primary is-pulled-right" onclick="hideModal('CreateBankAccount')">Close</button>
+        </footer>
+    </div>
+</div>
+
+
+@section script {
+    <script>
+        function showModal(modalId) {
+            var modal = document.getElementById(modalId);
+            modal.classList.add("is-active");
+        }
+
+
+        function hideModal(modalId) {
+            var modal = document.getElementById(modalId);
+            modal.classList.remove("is-active");
+        }
+    </script>
+}

@@ -1,0 +1,113 @@
+﻿@model FirstApp.Models.Account.LoginViewModel
+@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+@{
+    Layout = "_BaseLayout";
+}
+
+@section Style {
+    <style>
+        .centered {
+            height:100vh;
+        }
+        .login-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-logo > img {
+            width: 300px;
+        }
+        
+    </style>
+}
+
+@section Title {
+    <title>Biller.ng - Login </title>
+}
+
+<section class="section centered">
+    <div class="container">
+
+        <div class="columns centered is-align-content-center is-justify-content-center">
+            <div class="column"></div>
+            <div class="column is-two-fifths">
+
+                <div class="login-logo">
+                    <img src="/img/logo.png" alt="biller.ng logo" />
+                </div>
+                <div asp-validation-summary="ModelOnly" class="notification is-danger">
+                    <button class="delete"></button>
+                </div>
+                <div class="card">
+                    <div class="card-content">
+                        
+                        <form role="form" asp-action="Login" asp-controller="Account">
+                            @*<p>
+                            <label asp-for="Username"</label>
+                            <input asp-for="Username" class="form-control" placeholder="username" />
+                            <span asp-validation-for="Username"></span>
+                        </p
+
+                    <p>
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control" placeholder="Email" />
+                        <span asp-validation-for="Email"></span>
+                    </p>
+                    <p>
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password" class="form-control" type="password" placeholder="Password" />
+                        <span asp-validation-for="Password"></span>
+                    </p>
+
+                    <p>
+                        <button type="submit"> Submit </button>
+                    </p
+
+                        >*@
+
+                            <div class="field">
+
+                                <label class="label" asp-for="Email"></label>
+                                <div class="control has-icons-left has-icons-right">
+                                    <input asp-for="Email" class="input" type="email" placeholder="Email">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-envelope"></i>
+                                    </span>
+                                </div>
+                                <span asp-validation-for="Email" class="help is-danger"></span>
+                            </div>
+                            <div class="field">
+                                <label class="label" asp-for="Password"></label>
+                                <div class="control has-icons-left">
+                                    <input asp-for="Password" class="input" type="password" placeholder="Password">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                </div>
+                                <span asp-validation-for="Password" class="help is-danger"></span>
+                            </div>
+                            <div class="field">
+                                <p class="control">
+                                    <button class="button is-primary">
+                                        Login
+                                    </button>
+                                </p>
+                            </div>
+
+                        </form>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="column"></div>
+            </div>
+
+        
+    </div>
+</section>
+
+
+
+
+

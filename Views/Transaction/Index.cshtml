@@ -1,0 +1,323 @@
+﻿@model IEnumerable<FirstApp.Models.Transaction>
+@{
+    Layout = "_Dashboard";
+}
+@section Title {
+    <title>Biller.ng</title>
+}
+
+@section Style {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bulma.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <style>
+        .pagination-link.is-current {
+            background-color: #3E4095 !important;
+            color: #fff;
+        }
+
+        .fa {
+            color: #3E4095 !important;
+        }
+        #filter {
+            padding-right: 2px;
+        }
+    </style>
+}
+
+<nav class="breadcrumb is-small" aria-label="breadcrumbs">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li class="is-active"><a href="#" aria-current="page">Transactions</a></li>
+    </ul>
+</nav>
+
+<div class="level mt-2 mr-2 content-title">
+    <div class="level-left">
+        <div class="level-item">
+            <div class="title has-text-primary">
+
+                <span>Transactions</span>
+            </div>
+        </div>
+    </div>
+    <div class="level-right">
+        <div class="level-item">
+            <div id="reportrange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                <i class="fa fa-calendar"></i>&nbsp;
+                <span></span> <i class="fa fa-caret-down"></i>
+            </div>
+        </div>
+        <div class="level-item">
+            <a href="#" class="button is-primary" id="exportbtn" onclick="exportdata()"> Export </a>
+        </div>
+    </div>
+</div>
+
+
+<div class="columns is-multiline">
+    <div class="column">
+
+        @*<a class="button is-link">
+                <span class="icon is-small"> <i class="fa fa-plus"></i> </span><span>Add New </span>
+            </a>*@
+
+        @*<table class="table is-bordered is-striped is-narrow is-fullwidth mt-4">
+                <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Service</th>
+                        <th>Amount(₦)</th>
+                        <th>Status</th>
+                        <th>Customer</th>
+                        <th>Channel</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var transaction in Model)
+                    {
+                        @await Html.PartialAsync("_Transaction", transaction)
+                    }
+
+                </tbody>
+            </table>
+
+            <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+                <a class="pagination-previous">Previous</a>
+                <a class="pagination-next">Next page</a>
+                <ul class="pagination-list">
+                    <li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
+                    <li><span class="pagination-ellipsis">…</span></li>
+                    <li><a class="pagination-link" aria-label="Goto page 45">2</a></li>
+                    <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">3</a></li>
+                    <li><a class="pagination-link" aria-label="Goto page 47">4</a></li>
+                    <li><span class="pagination-ellipsis">…</span></li>
+                    <li><a class="pagination-link" aria-label="Goto page 86">6</a></li>
+                </ul>
+            </nav>*@
+        <div class="card card-datatable">
+            <div class="card-table">
+                <div class="content">
+                    <table id="transactions" class="table is-striped is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th>Filters</th>
+                                <th id="filter"></th>
+                                <th></th>
+                                <th id="filter"></th>
+                                <th id="filter"></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Service</th>
+                                <th>Amount(₦)</th>
+                                <th>Status</th>
+                                <th>Payment Plan</th>
+                                <th>Channel</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Script {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bulma.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.1.8/js/dataTables.fixedHeader.min.js"></script>
+    
+
+
+    <script>
+        var filtered_data = "";
+        $(document).ready(function () {
+            
+            @*$('#transactions thead tr').clone(true).appendTo('#transactions thead');
+            $('#transactions thead tr:eq(0) th').each(function (i) {
+                var title = $(this).text();
+                $(this).html('<select class="select is-small is-fullwidth"><option value=""></option></select>')
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+
+                        
+                            $(this).search(val ? '^' + val + '$' : '', true, false)
+                            .draw();
+                    });
+
+                table(this).data().unique().sort().each(function (d, j) {
+                    select.append('<option value="' + d + '">' + d + '</option>')
+                });
+            });*@
+
+            var table = $('#transactions').DataTable({
+       
+                ajax: {
+                    url: '/transactions/data',
+                    dataSrc: 'data'
+                },
+                "columns": [
+                    { "data": "transactionRef" },
+                    { "data": "service.name" },
+                    { "data": "amountCharged" },
+                    {
+
+                        "mData": "status",
+                        "mRender": function (data, type, row) {
+                            if (data == "Success") {
+                                return '<span class="tag is-primary">' + data + '</span>'
+                            } else if (data == "Initiated") {
+                                return '<span class="tag is-link">' + data + '</span>'
+                            } else if (data == "Pending") {
+                                return '<span class="tag is-warning">' + data + '</span>'
+                            } else {
+                                return '<span class="tag is-danger">' + data + '</span>'
+                            }
+
+                        }
+                    },
+                    { "data": "paymentPlan.servicePlan.name" },
+                    { "data": "channel" },
+                    {
+                        "mData": "createdAt",
+                        "mRender": function (data, type, row) {
+                            var date = new Date(data);
+                            return date.toLocaleString();
+                        }
+                    },
+                    {
+                        "mData": "id",
+                        "mRender": function (data, type, row) {
+                            return '<a href="/transactions/' + data + '"><span class="tag is-black">View</span></a>'
+                        }
+                    }
+
+                 ],
+                initComplete: function () {
+
+            
+              
+                     filtered_data = table.rows({ search: 'applied' }).data().toArray();
+
+                    this.api().columns([1, 3, 4]).every(function (i) {
+               
+
+                        //var column = this;
+                        var column = table.column(i);
+                        var theadname = $('#transactions thead tr:eq(1) th').eq([i]).text();
+                        var select = $(`<select class="select is-small is-fullwidth"><option value="">${theadname}</option></select>`)
+                            .appendTo($('#transactions thead tr:eq(0) th').eq(i))
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search(val ? '^' + val + '$' : '', true, false)
+                                    .draw();
+                                var filteredData = table.rows({ search: 'applied' }).data().toArray();
+                                filtered_data = filteredData;
+                                console.log(filtered_data);
+                            });
+
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                    });
+                },
+            });
+            
+            $(function () {
+
+                var start = moment().subtract(29, 'days');
+                var end = moment();
+
+                function cb(start, end) {
+                    $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+                    //$("#exportbtn").attr("href", "/transactions/export?DateFrom=" + start.format("DD-MM-YYYY") + "&DateTo=" + end.format("DD-MM-YYYY"));
+                }
+
+                $('#reportrange').daterangepicker({
+                    startDate: start,
+                    endDate: end,
+                    ranges: {
+                        'Today': [moment(), moment()],
+                        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                        'This Month': [moment().startOf('month'), moment().endOf('month')],
+                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    },
+                    locale: {
+                        format: 'DD-MM-YYYY'
+                    }
+                }, function (start, end) {
+                    $('#transactions').DataTable().ajax.url("/transactions/data?DateFrom=" + start.format("DD-MM-YYYY") + "&DateTo=" + end.format("DD-MM-YYYY")).load();
+                    var filteredData = table.rows({ search: 'applied' }).data().toArray();
+                    filtered_data = filteredData;
+                });
+
+                cb(start, end);
+
+            });
+            
+        })
+        function exportdata() {
+            var timestamp = new Date().getTime();
+            $.ajax({
+                type: "POST",
+                url: "transactions/export",
+                data: JSON.stringify(filtered_data),
+                contentType: 'application/json;charset=utf-8',
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function (data) {
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(data);
+                    a.href = url;
+                    a.download = `Biller.NG_Transactions_${timestamp}.xlsx`;
+                    document.body.append(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+                },
+                error: function (xhr) {
+                    console.log(' Error:  >>>> ' + JSON.stringify(xhr));
+                }
+            });
+        }
+        
+    </script>
+}
+
+

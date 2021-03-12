@@ -1,0 +1,170 @@
+﻿@model FirstApp.Models.Account.CreateUserViewModel
+@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+@{
+    Layout = "_Dashboard";
+}
+
+@section Title {
+
+    <title>Biller.ng - Create Account</title>
+}
+
+
+<nav class="breadcrumb is-small" aria-label="breadcrumbs">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li class="is-active"><a href="#" aria-current="page">Account</a></li>
+    </ul>
+</nav>
+
+<div class="level mt-2 mr-2 content-title">
+    <div class="level-left">
+        <div class="level-item">
+            <div class="title has-text-primary">
+                <span>Account</span>
+            </div>
+        </div>
+    </div>
+    <div class="level-right">
+        <div class="level-item">
+            @*<button type="button" class="button is-small">March 8, 2017 - April 6, 2017</button>*@
+        </div>
+    </div>
+</div>
+
+
+<div class="columns is-multiline">
+    <div class="column">
+
+        @*<a class="button is-link">
+                <span class="icon is-small"> <i class="fa fa-plus"></i> </span><span>Add New </span>
+            </a>*@
+
+
+        <div class="content">
+            <div class="card">
+                <div class="card-content">
+
+                    <div class="columns">
+                        <div class="column">
+
+                        </div>
+                        <div class="column is-three-fifths">
+                            <form asp-action="Create" asp-controller="Account">
+                                <div asp-validation-summary="ModelOnly" class="Error"></div>
+                                <div class="field is-horizontal">
+
+                                    <div class="field-body">
+
+                                        <div class="field">
+                                            <label asp-for="FirstName" class="label"></label>
+                                            <div class="control">
+                                                <input asp-for="FirstName" class="input" placeholder="First Name" />
+                                                <span asp-validation-for="FirstName"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="field">
+                                            <label asp-for="LastName" class="label"></label>
+                                            <div class="control">
+                                                <input asp-for="LastName" class="input" placeholder="Last Name" />
+                                                <span asp-validation-for="LastName"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="field">
+                                    <label asp-for="Username" class="label"></label>
+                                    <div class="control">
+                                        <input asp-for="Username" class="input" placeholder="username" />
+                                        <span asp-validation-for="Username"></span>
+                                    </div>
+                                </div>
+                                <div class="field">
+
+                                    <label asp-for="Email" class="label"></label>
+                                    <div class="control">
+                                        <input asp-for="Email" class="input" placeholder="Email" />
+                                        <span asp-validation-for="Email"></span>
+                                    </div>
+                                </div>
+
+
+                                <div>
+                                    <label asp-for="CompanyName" class="label"></label>
+                                    <div class="control">
+                                        <input asp-for="CompanyName" class="input" placeholder="Company Name" />
+                                        <span asp-validation-for="CompanyName"></span>
+                                    </div>
+                                </div>
+
+                                <div class="field">
+                                    <label class="label">Account Type</label>
+                                    <div class="control">
+                                        <div class="select is-fullwidth">
+                                            <select asp-for="AccountType">
+                                                <option>Select role</option>
+                                                <option value="Customer">Customer</option>
+                                                <option value="Merchant">Merchant</option>
+                                                <option value="Manager">Manager</option>
+                                                <option value="ExSupervisor">External Supervisor</option>
+                                                <option value="Supervisor">Supervisor</option>
+                                                <option value="Administrator">Administrator</option>
+
+
+                                            </select>
+                                        </div>
+                                        <span asp-validation-for="AccountType"></span>
+                                    </div>
+                                    <div asp-validation-for="PaymentPlan" class="help is-success"></div>
+                                </div>
+
+
+
+                                <div class="field is-horizontal">
+
+                                    <div class="field-body">
+
+                                        <div class="field">
+                                            <label asp-for="Password" class="label"></label>
+                                            <div class="control">
+                                                <input asp-for="Password" class="input" placeholder="Password" />
+                                                <span asp-validation-for="Password"></span>
+                                            </div>
+                                        </div>
+                                        <div class="field">
+                                            <label asp-for="ConfirmPassword" class="label"></label>
+                                            <div class="control">
+                                                <input asp-for="ConfirmPassword" class="input" placeholder="Confirm Password" />
+                                                <span asp-validation-for="ConfirmPassword"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="control">
+                                        <button class="button is-primary" type="submit"> Submit </button>
+                                    </div>
+                                </div>
+
+
+                            </form>
+
+                        </div>
+                        <div class="column">
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+           

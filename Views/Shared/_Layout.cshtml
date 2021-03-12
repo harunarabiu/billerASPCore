@@ -1,0 +1,171 @@
+﻿@using FirstApp.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> userManager
+@{
+    var userInfo = (await userManager?.GetUserAsync(User));
+    var claim = (ClaimsIdentity)User.Identity;
+    // where 'xxx' is any property of ApplicationUser model
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @if (IsSectionDefined("Title"))
+    {
+        @RenderSection("Title", false)
+    }
+    else
+    {
+        <title>
+            Biller.ng
+        </title>
+    }
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bulma/css/bulma.min.css" />
+        <link rel="stylesheet" href="~/lib/fontawesome/css/solid.min.css" />
+        <link rel="stylesheet" href="~/lib/fontawesome/css/fontawesome.min.css" />
+        <script src="~/lib/fontawesome/js/solid.min.js"></script>
+        <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    </environment>
+    <environment names="Production">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
+              asp-fallback-href="~/lib/bulma/css/bulma.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/solid.min.css" integrity="sha512-SazV6tF6Ko4GxhyIZpKoXiKYndqzh7+cqxl9HDH7DGSpjkCN3QLqTAlhJHJnKxu3/2rfCsltzwFC4CmxZE1hPg=="
+              asp-fallback-href="~/lib/fontawesome/css/solid.min.css" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/fontawesome.min.css" integrity="sha512-kJ30H6g4NGhWopgdseRb8wTsyllFUYIx3hiUwmGAkgA9B/JbzUBDQVr2VVlWGde6sdBVOG7oU8AL35ORDuMm8g=="
+              asp-fallback-href="~/lib/fontawesome/css/fontawesome.min.css" crossorigin="anonymous" />
+        <script href="https://use.fontawesome.com/releases/v5.14.0/js/all.js"
+                asp-fallback-href="~/lib/fontawesome/js/all.js"
+                asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+        <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    </environment>
+
+    @if (IsSectionDefined("Style"))
+    {
+        @RenderSection("Style", false)
+    }
+    else
+    {
+        <Style>
+        </Style>
+    }
+
+</head>
+<body>
+
+
+    <nav class="navbar has-shadow main-navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+
+            <a class="navbar-item" href="@(User.Identity.IsAuthenticated ? Url.Action("Dashboard", "Home") : Url.Action("Index", "Home") )">
+                <img src="/img/logo.png" width="112" height="28">
+            </a>
+
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        @*<div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item">
+                    Home
+                </a>
+
+                <a class="navbar-item">
+                    Documentation
+                </a>
+
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                        More
+                    </a>
+
+                    <div class="navbar-dropdown">
+                        <a class="navbar-item">
+                            About
+                        </a>
+                        <a class="navbar-item">
+                            Jobs
+                        </a>
+                        <a class="navbar-item">
+                            Contact
+                        </a>
+                        <hr class="navbar-divider">
+                        <a class="navbar-item">
+                            Report an issue
+                        </a>
+                    </div>
+                </div>
+            </div>*@
+
+        <div class="navbar-end">
+            @if (User.Identity.IsAuthenticated)
+            {
+
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                        @userInfo.FirstName @userInfo.LastName
+                    </a>
+                    <div class="navbar-dropdown">
+                        <a class="navbar-item" href="@Url.Action("Index", "Home")">
+                            Home
+                        </a>
+                        <a class="navbar-item">
+                            <form asp-action="Logout" asp-controller="Account" method="post">
+                                <Input class="button is-light" type="submit" value="Logout" />
+                            </form>
+                        </a>
+
+                    </div>
+                </div>
+
+
+            }
+            else
+            {
+                <div class="navbar-item">
+                    <div class="buttons">
+
+                        <span class="button is-primary">
+                            <a href="@Url.Action("Login", "Account")">Login</a>
+                        </span>
+                    </div>
+                </div>
+            }
+
+        </div>
+        </div>
+    </nav>
+    @RenderBody()
+
+    @if (IsSectionDefined("Footer"))
+    {
+        @RenderSection("Footer", false)
+    }
+    else
+    {
+        <Footer>
+        </Footer>
+    }
+    @if (IsSectionDefined("Script"))
+    {
+        @RenderSection("Script", false)
+    }
+    else
+    {
+        <script></script>
+    }
+</body>
+</html>

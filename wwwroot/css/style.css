@@ -1,0 +1,45 @@
+﻿body {
+}
+.navbar-main {
+    box-shadow: 0 2px 5px 0 hsla(0, 0%, 0%, 0.2);
+}
+.main-content {
+    padding: 2em 1em 0 1em;
+}
+
+.side-menu {
+    padding: 2em .2em 0 1em;
+    height: calc(100vh - 3rem);
+    box-shadow: 0 2px 5px 0 hsla(0, 0%, 0%, 0.2);
+}
+
+.button.is-primary {
+    background: #3E4095;
+    color: #fff;
+}
+
+.button.is-primary > a{
+    color: #fff;
+}
+
+.button.is-primary:hover {
+    background: #3E4095cc;
+    color: #fff;
+}
+
+
+
+.has-text-primary {
+    color: #3E4095 !important;
+}
+
+.notification.is-primary {
+    background: #7f00ff !important;
+}
+
+.button.is-primary[disabled], fieldset[disabled] .button.is-primary {
+    background-color: #3E4095cc !important;
+}
+.card-datatable {
+    padding: 10px;
+}

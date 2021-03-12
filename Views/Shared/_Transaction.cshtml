@@ -1,0 +1,26 @@
+﻿@inject FirstApp.Models.TextFormatting Format
+@model FirstApp.Models.Transaction
+
+
+
+<tr>
+    <td> @Model.TransactionRef</td>
+    <td> @Model.Service.Name</td>
+    <td> @Model.Amount</td>
+    <td><span class="tag is-success">@Model.Status</span></td>
+    <td>@Model.User.Email</td>
+    <td>@Model.Channel</td>
+    <td>@Model.CreatedAt</td>
+
+    <td>
+        <a href="@Url.Action("TransactionDetails","Transaction", new { transactionId = Model.Id })" title="Edit" class="button is-small is-light">
+            <span class="icon is-small">
+                <i class="fas fa-eye"></i>
+            </span>
+            <span>
+                View
+            </span>
+        </a>
+
+    </td>
+</tr>

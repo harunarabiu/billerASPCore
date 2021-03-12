@@ -1,0 +1,706 @@
+﻿@model FirstApp.Models.ViewModels.PaymentRequest
+@using Microsoft.AspNetCore.Hosting
+@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+@{
+    Layout = "_Layout";
+}
+@section Title {
+    <title>Biller.ng - Welcome </title>
+}
+@section Style {
+    <style>
+        .xloader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height: 70px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            background-color: hsla(0, 100%, 100%, 0.5)
+        }
+
+        .hero {
+            background: #e0e8f9;
+        }
+
+        .landing {
+            background-image: url(/css/cool-background.svg);
+        }
+
+        .footer.footer-dark {
+            background: #3E4095;
+            color: #fff;
+        }
+
+        .columns {
+            margin-top: 35px;
+        }
+
+        .footer-logo > img {
+            height: 40px;
+        }
+
+        .footer-column .footer-header h3 {
+            font-weight: 500;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .link-list {
+            line-height: 40px;
+            font-size: 1.1rem;
+        }
+
+            .link-list a {
+                color: #98a9c3;
+                font-weight: 400;
+                transition: all 0.5s;
+            }
+
+            .link-list:hover {
+                color: #fcfcfc;
+            }
+
+        .level-item .icon {
+            color: #F39200;
+            transition: all 0.5s;
+        }
+
+        .level-item:hover {
+            color: #fcfcfc;
+        }
+
+        .footer {
+            padding: 1rem 1rem 3rem;
+        }
+
+        .success-icon {
+            color: green;
+            font-size: 80px;
+        }
+
+        .token {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .icon-danger {
+            fill: hsl(348, 100%, 61%);
+        }
+
+        .icon-secondary {
+            fill: #fff;
+        }
+
+        .icon-success {
+            fill: green;
+        }
+
+        .icon-white {
+            fill: #fff;
+        }
+
+        .icon-pending {
+            fill: #3E4095;
+        }
+
+        .icon-x10 {
+            height: 10rem;
+        }
+
+        .loadercontainer {
+            display: block;
+        }
+
+        .animatewrapper {
+            margin-top: -50px;
+        }
+
+        .animate {
+            width: 60%;
+        }
+
+        .optional {
+            font-style: italic;
+            font-weight: lighter;
+        }
+    </style>
+}
+
+<section class="hero">
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns is-vcentered">
+                <div class="column is-offset-1">
+                    <div class="animatewrapper">
+                        <img src="/img/billerpay.gif" class="animate" alt="Biller Animate" />
+                    </div>
+
+                    <h1 class="title main-title text-bold is-2">The Easiest Way to Pay Bills</h1>
+                    <h2 class="subtitle is-5 is-light no-margin-bottom">
+                        Make your Electricity Payment anytime, anywhere with biller.ng
+                    </h2>
+                </div>
+                <div class="column is-5 ">
+                    <div class="card">
+                        <div class="card-content" id="card">
+                            <form id="otpayment" onsubmit="prepayment(this)" method="post">
+                                <div class="field is-horizontal">
+
+                                    <div class="field-body">
+                                        <div class="field">
+                                            <label class="label">Location</label>
+                                            <div class="control">
+                                                <div class="select is-fullwidth">
+                                                    <select asp-for="Service">
+                                                        <option value="">Select location</option>
+                                                        <option value="kedco">Kano</option>
+                                                        <option value="kedco">Jigawa</option>
+                                                        <option value="kedco">Katsina</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <span class="help is-danger"></span>
+                                        </div>
+                                        <div class="field">
+                                            <label class="label">Account Type</label>
+                                            <div class="control">
+                                                <div class="select is-fullwidth">
+                                                    <select asp-for="PaymentPlan" id="PaymentPlan">
+                                                        <option value="">Select Account Type</option>
+                                                        <option value="prepaid">Prepaid</option>
+                                                        <option value="postpaid">Postpaid</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <span id="PaymentPlanMsg" class="help is-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="field">
+                                    <label asp-for="CustomerId" class="label" id="CustomerIdLabel">Meter Number</label>
+                                    <div class="control">
+                                        <input asp-for="CustomerId" id="CustomerId" class="input" placeholder="Meter Number">
+                                    </div>
+                                    <span id="CustomerIdMsg" class="help is-danger"></span>
+                                </div>
+
+                                <div id="customernameblock" style="display: none" class="field">
+                                    <label class="label">Customer Name</label>
+                                    <div class="control">
+                                        <input id="CustomerName" class="input" value="" disabled>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="field">
+                                    <label asp-for="PhoneNumber" class="label">Phone Number</label>
+                                    <div class="control">
+                                        <input asp-for="PhoneNumber" class="input" type="text" placeholder="Phone Number">
+                                    </div>
+                                    <span class="help is-danger"></span>
+                                </div>
+                                <div class="field">
+                                    <label asp-for="Email" class="label">Email <span class="optional">(optional)</span></label>
+                                    <div class="control">
+                                        <input asp-for="Email" class="input" type="email" placeholder="Email">
+                                    </div>
+                                    <span class="help is-danger"></span>
+                                </div>
+
+                                <div class="field">
+                                    <label asp-for="Amount" class="label">Amount</label>
+                                    <div class="control">
+                                        <input asp-for="Amount" class="input" type="text" placeholder="Amount">
+                                    </div>
+                                    <span class="help is-danger"></span>
+                                </div>
+
+                                <div class="field is-grouped">
+                                    <div class="control">
+                                        <a href="#" id="button" onclick="prepayment(this)" class="button is-primary" disabled> continue</a>
+                                    </div>
+
+                                </div>
+                            </form>
+
+                        </div>
+                        <div id="loader" class="loadercontainer">
+                            <div class="xloader">
+                                <img src="img/biller_loader.svg" />
+                            </div>
+                        </div>
+                    </div>
+</section>
+
+
+<div id="paymentdetails" style="display: none">
+    <div class="content">
+        <table class="table is-fullwidth is-striped">
+            <tbody>
+                <tr>
+                    <td>Customer Name</td>
+                    <td class="has-text-right" id="customer"></td>
+                </tr>
+                <tr>
+                    <td>Address</td>
+                    <td class="has-text-right" id="address"></td>
+                </tr>
+                <tr>
+                    <td id="paymentCustomerIdLabel">Meter Number</td>
+                    <td class="has-text-right" id="paymentCustomerId"></td>
+                </tr>
+                <tr>
+                    <td>Service Name</td>
+                    <td class="has-text-right" id="service"></td>
+                </tr>
+                <tr>
+                    <td>Tariff Plan</td>
+                    <td class="has-text-right" id="tariff"></td>
+                </tr>
+                <tr>
+
+                    <td>Tariff Class</td>
+                    <td class="has-text-right" id="tariffclass"></td>
+                </tr>
+                <tr>
+
+                    <td>Customer Arrears </td>
+                    <td class="has-text-right" id="arrears"></td>
+                </tr>
+                <tr>
+
+                    <td>Amount</td>
+                    <td class="has-text-right" id="amount"></td>
+                </tr>
+                <tr>
+
+                    <td>Convenience Fee</td>
+                    <td class="has-text-right" id="cfee"></td>
+                </tr>
+                <tr>
+
+                    <td>Total</td>
+                    <td class="has-text-right" id="total"></td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <div class="field">
+            <div class="control">
+                <button class="button is-primary is-fullwidth" id="paybutton" onclick="makepayment()"></button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="failedinfo" style="display: none">
+    <div class="content has-text-centered">
+        <div class="">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-x10">
+                <circle cx="12" cy="12" r="10" class="icon-danger" />
+                <path class="icon-white" d="M13.41 12l2.83 2.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 1 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12z" />
+            </svg>
+        </div>
+        <h3 class="subtitle">Payment Failed</h3>
+        <p>Sorry we couldn't complete your payment. </p>
+        <h3 class="has-text-weight-medium">For support</h3>
+        <p><span class="has-text-weight-medium">Email</span> help@biller.ng or <span class="has-text-weight-medium">call</span> 09061385050</p>
+        <p class="has-background-link-light">visit <a href="http://customercare.kedco.ng" target="_blank">customercare.kedco.ng</a> </p>
+
+        <div class="field">
+            <div class="control">
+                <a href="/" class="button is-warning"> Try Again </a>
+            </div>
+
+        </div>
+
+        <div class="field">
+            <div class="control">
+                <a href="/" class="button is-primary"> Return Home</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="pendinginfo" style="display: none">
+    <div class="content has-text-centered">
+        <div class="">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-x10">
+                <circle cx="12" cy="12" r="10" class="icon-pending" />
+                <path class="icon-white" d="M8.52 7.11a5.98 5.98 0 0 1 8.98 2.5 1 1 0 1 1-1.83.8 4 4 0 0 0-5.7-1.86l.74.74A1 1 0 0 1 10 11H7a1 1 0 0 1-1-1V7a1 1 0 0 1 1.7-.7l.82.81zm5.51 8.34l-.74-.74A1 1 0 0 1 14 13h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1.7.7l-.82-.81A5.98 5.98 0 0 1 6.5 14.4a1 1 0 1 1 1.83-.8 4 4 0 0 0 5.7 1.85z" />
+            </svg>
+        </div>
+        <h3 class="subtitle">Payment Received</h3>
+        <p>Your Transaction Ref is <span id="receipttransactionid" class="has-text-weight-bold">BLR-2431029</span></p>
+        <p> We're sorting out your transaction, you will receive your token very soon, <span class="has-text-danger">please do not try again.</span></p>
+        <p>We are sorry for the delay</p>
+
+        <h3 class="has-text-weight-medium">For support</h3>
+        <p><span class="has-text-weight-medium">Email</span> help@biller.ng or <span class="has-text-weight-medium">call</span> 09061385050</p>
+        <p class="has-background-link-light">visit <a href="http://customercare.kedco.ng" target="_blank">customercare.kedco.ng</a> </p>
+
+
+
+        <div class="field">
+            <div class="control">
+                <a href="/" class="button is-primary"> Return Home</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="successinfo" style="display: none">
+    <div class="content has-text-centered">
+        <div class="">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon-x10">
+                <circle cx="12" cy="12" r="10" class="icon-success" />
+                <path class="icon-white" d="M10 14.59l6.3-6.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-3-3a1 1 0 0 1 1.4-1.42l2.3 2.3z" />
+            </svg>
+        </div>
+        <h3>Your Payment was Successful!</h3>
+        <div id="tokencontainer">
+            <span>Here is your Token.</span>
+            <div class="notification is-warning">
+                <span class="token" id="receiptrechargetoken">1234  5678  9012  3456  7890</span>
+            </div>
+        </div>
+        <p>Your Transaction Ref is <span id="receipttransactionid" class="has-text-weight-bold">BLR-2431029</span></p>
+
+        <p>You can download your transaction receipt by clicking on this link <a href="#" id="receiptdownloadbtn">Download</a></p>
+        <p>For support, please visit <a href="http://customercare.kedco.ng">customercare.kedco.ng</a> </p>
+        <p>Thank you for using Biller.ng</p>
+
+        <div class="field">
+            <div class="control">
+                <a href="/" class="button is-primary"> Return Home</a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+@section Footer {
+    <footer class="footer footer-dark">
+        <div class="container">
+            <div class="columns">
+                <div class="column">
+                    <div class="footer-logo">
+                        <img src="img/logo_inverted.png">
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="footer-column">
+                        <div class="footer-header">
+                            <h3>About</h3>
+                        </div>
+                        <ul class="link-list">
+                            <li><a href="#">About us</a></li>
+                            <li><a href="#">Contact us</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">FAQs</a></li>
+                            <li><a href="#">Developers</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="column">
+                    <div class="footer-column">
+                        <div class="footer-header">
+                            <h3>Follow Us</h3>
+                        </div>
+                        <ul class="link-list">
+                            <li><a href="#">Facebook</a></li>
+                            <li><a href="#">Twitter</a></li>
+
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </footer>
+}
+
+
+@section script {
+    <script>var customername = "";
+        var transactionRef = "";
+        var paymentPlan = "";
+        var EMAIL = "";
+        var PHONE = "";
+        var TRANSACTION_REF = ""
+        var GLADE_MID = "@(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production" ? @Environment.GetEnvironmentVariable("GLADE_MID") : @Environment.GetEnvironmentVariable("GLADE_TEST_MID"))"
+
+        $(document).ready(function () {
+
+            $("#loader").hide();
+
+            console.log("Running Again");
+
+            $('#customernameblock').hide();
+
+            setInterval(function () {
+                var customerName = $("#CustomerName").val();
+                var amount = $("#Amount").val();
+                var phoneNumber = $("#PhoneNumber").val();
+                var meterNumber = $("#PhoneNumber").val();
+
+                if (customerName != ' ' && amount >= 500 && phoneNumber.length == 11) {
+                    $("#button").removeAttr("disabled");
+
+                }
+            }, 1000);
+
+            $("#PaymentPlan").on('change', function () {
+                paymentPlan = $('#PaymentPlan option:selected').val();
+
+                if (paymentPlan === "postpaid") {
+                    $("#paymentCustomerIdLabel").html("Account Number");
+                    $("#CustomerIdLabel").html("Account Number");
+                    $("#CustomerId").attr("placeholder", "Account Number");
+                    $("#tokencontainer").hide();
+                    console.log($("#CustomerIdLabel").text())
+                } else if (paymentPlan === "prepaid") {
+                    $("#paymentCustomerIdLabel").html("Meter Number");
+                    $("#CustomerIdLabel").html("Meter Number");
+                    $("#CustomerId").attr("placeholder", "Meter Number");
+                    $("#tokencontainer").show();
+                    console.log($("#CustomerIdLabel").text())
+                }
+                console.log("payment plan ", paymentPlan);
+            });
+
+
+
+
+            $("#CustomerId").on('change', function validateMeter() {
+                var meternumber = $("#CustomerId").val();
+                //var paymentPlan = $('#PaymentPlan option:selected').val();
+                var service = $('#Service option:selected').val();
+
+                console.log("Meter Number: ", paymentPlan);
+                $.ajax({
+                    url: 'api/v1/kedco/verify',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ CustomerId: meternumber, Service: "kedco", PaymentPlan: paymentPlan }),
+                    type: 'post'
+                }).done(function (response) {
+                    console.log('Done: ', response);
+                    var responseData = response.data
+                    if (response.ok && responseData.customerName && responseData.customerName != "") {
+                        $("#CustomerIdMsg").html("");
+                        $('#CustomerName').val(responseData.customerName);
+                        $('#customernameblock').show();
+
+                        //populate payment detauls
+                        $('#customer').html($.trim(responseData.customerName))
+                        $('#address').html(responseData.address)
+                        $('#tariff').html(responseData.tariff)
+                        $('#tariffclass').html(responseData.tariffCode)
+                        $('#paymentCustomerId').html(meternumber)
+                        $('#arrears').html(responseData.customerArrears)
+
+                    } else {
+                        $('#customernameblock').hide();
+                        $("#CustomerIdMsg").html("Invalid meter number")
+
+                    }
+
+                }).fail(function () {
+                    console.log('Failed');
+                });
+            });
+
+
+            $("#button").on("click", function () {
+
+
+
+            });
+
+
+        });
+
+
+
+        function prepayment(btn) {
+            $("#loader").show();
+            var data = $("form");
+            console.log("Data", Object.fromEntries(data));
+            var object = {};
+            console.log("forDataSerialize", data.serialize())
+            console.log("forDataArray", data.serializeArray())
+            console.log("forDataArrayJson", JSON.stringify(data.serializeArray()))
+            //data.forEach((value, key) => object[key] = value);
+
+            var json = JSON.stringify(object)
+            console.log("Json", json);
+
+            var service = $("#Service").val();
+            var meternumber = $("#CustomerId").val();
+            var amount = $("#Amount").val();
+            var phone = $("#PhoneNumber").val();
+            EMAIL = $("#Email").val();
+            PHONE = phone;
+
+
+
+            console.log(service, paymentPlan, meternumber, amount, phone)
+            var formdata = {
+                Service: service,
+                PaymentPlan: paymentPlan,
+                CustomerId: meternumber,
+                Amount: amount,
+                PhoneNumber: phone,
+                Email: EMAIL
+            }
+
+            console.log(JSON.stringify(formdata));
+
+            $.ajax({
+                url: 'payment/otprepayment',
+                contentType: 'application/json',
+                data: JSON.stringify(formdata),
+                type: 'post'
+
+            }).done(function (responseData) {
+
+                console.log('Done: ', responseData);
+                $("#loader").hide();
+
+
+
+
+                if (responseData.data && responseData.data != "") {
+                    $('#cfee').html(responseData.data.serviceFee);
+                    $('#amount').html(responseData.data.amount);
+                    $('#total').html(responseData.data.amountCharged);
+                    $('#service').html(responseData.data.service.name);
+
+                    transactionRef = responseData.data.transactionRef;
+                    TRANSACTION_REF = transactionRef;
+
+                    $('#paybutton').html("Pay ₦".concat(responseData.data.amountCharged));
+                    //show payment details
+                    var detail = $("#paymentdetails").html();
+                    $("#card").html(detail);
+
+                } else {
+
+
+                }
+            }).fail(function () {
+                console.log('Failed');
+                $("#loader").hide();
+                alert("Transaction failed, please try again.");
+            });;
+        }
+
+
+
+        function makepayment() {
+
+            $("#loader").show();
+            console.log("loading showing");
+            var customer = $('#customer').html()
+            $('#address').val()
+            $('#tariff').val()
+            $('#tariffclass').val()
+            $('#Account Number').val()
+            $('#arrears').val()
+
+            initPayment({
+
+                MID: GLADE_MID,
+                email: EMAIL,
+                firstname: customer.split(" ")[0],
+                lastname: customer.split(" ").slice(-1).pop(),
+                description: $('#paymentCustomerId').html(),
+                title: "",
+                amount: $('#total').html(),
+                country: "NG",
+                currency: "NGN",
+                customer_txnref: transactionRef,
+                onclose: function (response) {
+                    $("#loader").hide();
+                                                    /*TODO: send notification to backend payment cancelled
+                                                    paymentdone(response.txnRef, response.customer_txnref)*/;
+                },
+                callback: function (response) {
+                    console.log("payment_response", response)
+                    $("#loader").hide();
+                    paymentdone(response.txnRef, response.customer_txnref);
+
+                }
+            });
+
+        };
+
+        function paymentdone(PaymentTxnRef, TxnRef) {
+
+            console.log("Payment done")
+            $("#loader").show();
+            var paymentdetails = {
+                PaymentTxnRef: PaymentTxnRef,
+                TxnRef: TxnRef
+            }
+
+            $.ajax({
+                url: 'payment/processotpayment',
+                contentType: 'application/json',
+                data: JSON.stringify(paymentdetails),
+                type: 'post'
+
+            }).done(function (responseData) {
+
+                console.log('Done: ', responseData);
+
+                if (responseData.ok === true && responseData.data.transactionRef != "" && responseData.data.transactionToken != "") {
+
+                    $("#receiptrechargetoken").html(responseData.data.transactionToken)
+                    $("#receipttransactionid").html(responseData.data.transactionRef)
+                    $("#receiptdownloadbtn").attr("href", "/receipt/" + responseData.data.transactionRef)
+                    $("#loader").hide();
+                    var detail = $("#successinfo").html();
+                    $("#card").html(detail);
+
+
+                } else {
+
+                    $("#loader").hide();
+                    var detail = $("#failedinfo").html();
+                    $("#card").html(detail);
+
+                }
+            }).fail(function () {
+
+                console.log('Failed');
+                $("#loader").hide();
+                $("#receipttransactionid").html(TRANSACTION_REF)
+                $("#customercontactinfo").html(EMAIL + "/" + PHONE)
+                var detail = $("#pendinginfo").html();
+                $("#card").html(detail);
+            });;
+
+        }</script>
+
+    <environment names="Production">
+        <script type="text/javascript" src="https://api.glade.ng/checkout.js"></script>
+    </environment>
+    <environment names="Development">
+        <script type="text/javascript" src="https://demo.api.glade.ng/checkout.js"></script>
+    </environment>
+}

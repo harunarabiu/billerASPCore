@@ -1,0 +1,98 @@
+﻿@model IEnumerable<FirstApp.Models.Transaction>
+
+
+@*@await (Component.InvokeAsync<FirstApp.ViewComponents.Statistics>())*@
+
+@{
+    var amountTotal = Model.Sum(x => x.Amount);
+    var amountTotalToday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.Date).Sum(x => x.Amount);
+    var amountTotalYesterday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.AddDays(-1).Date).Sum(x => x.Amount);
+    var amountReceivable = Model.Sum(x => x.Amount) * (0.035);
+    var amountReceivableToday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.Date).Sum(x => x.Amount) * (0.035);
+    var amountReceivableYesterday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.AddDays(-1).Date).Sum(x => x.Amount) * (0.035);
+    var amountPayable = Model.Sum(x => x.Amount) - amountReceivable;
+    var amountPayableToday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.Date).Sum(x => x.Amount) - amountReceivableToday;
+    var amountPayableYesterday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.AddDays(-1).Date).Sum(x => x.Amount) - amountReceivableYesterday;
+}
+
+<div class="columns is-multiline">
+    <div class="column">
+        <div class="box notification is-primary">
+            <div class="level">
+                <div class="">
+                    <div class="heading">Total Receivable</div>
+                    <div class="title is-5">₦@string.Format("{0:0,0.0}", amountTotalToday)</div>
+                </div>
+                <div class="">
+                    <div class="heading">Yesterday</div>
+                    <div class="title is-5">₦@string.Format("{0:0,0.0}", amountTotalYesterday)</div>
+                </div>
+            </div>
+            <div class="level">
+
+                <div class="">
+                    <div class="heading">This Month</div>
+                    <div class="title is-5">₦@string.Format("{0:0,0.0}", amountTotal)</div>
+                </div>
+                <div class="">
+                    <div class="heading">Last Month</div>
+                    <div class="title is-5">₦@string.Format("{0:0,0.0}", 0)</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <div class="box notification is-warning">
+            <div class="level">
+                <div class="">
+                    <div class="heading">Account Payable</div>
+                    <div class="title is-5">₦@string.Format("{0:0,0.0}", amountPayableToday)</div>
+                </div>
+                <div class="">
+                    <div class="heading">Yesterday</div>
+                    <div class="title is-5">₦@string.Format("{0:0,0.0}", amountPayableYesterday)</div>
+                </div>
+            </div>
+            <div class="level">
+
+                <div class="">
+                    <div class="heading">This Month</div>
+                    <div class="title is-5">₦@string.Format("{0:0,0.0}", amountPayable)</div>
+                </div>
+                <div class="">
+                    <div class="heading">Last Month</div>
+                    <div class="title is-5">₦@string.Format("{0:0,0.0}", 0)</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <div class="box notification is-info">
+            <div class="level">
+                <div class="">
+                    <div class="heading">Account Receive</div>
+                    <div class="title is-5">₦@string.Format("{0:0,0.0}", amountReceivableToday)</div>
+                </div>
+                <div class="">
+                    <div class="heading">Yesterday</div>
+                    <div class="title is-5">₦@string.Format("{0:0,0.0}", amountReceivableYesterday)</div>
+                </div>
+            </div>
+            <div class="level">
+
+                <div class="">
+                    <div class="heading">This Month</div>
+                    <div class="title is-5">₦@string.Format("{0:0,0.0}", amountReceivable)</div>
+                </div>
+                <div class="">
+                    <div class="heading">Last Month</div>
+                    <div class="title is-5">₦@string.Format("{0:0,0.0}", 0)</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

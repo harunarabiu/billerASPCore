@@ -1,0 +1,76 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+@{
+    Layout = "_Layout";
+}
+@RenderSection("Title", false)
+@RenderSection("Style", false)
+
+<div class="wrapper">
+    <div class="columns">
+        <div class="column is-one-fifth">
+            <aside class="menu is-link side-menu">
+                <p class="menu-label">
+                    General
+                </p>
+                <ul class="menu-list">
+                    <li><a href="@Url.Action("Dashboard","Home")">Overview</a></li>
+                </ul>
+                @if (!User.IsInRole("ExSupervisor"))
+                {
+                    <p class="menu-label">
+                        Account
+                    </p>
+
+                    <ul class="menu-list">
+                        <li><a href="@Url.Action("AccountBalance", "Account")">Balance</a></li>
+
+                    </ul>
+                }
+                    <p class="menu-label">
+                        Transactions
+                    </p>
+                    <ul class="menu-list">
+                        <li><a href="@Url.Action("Index","Transaction")">All Transactions</a></li>
+                        @*<li><a href="@Url.Action("Index","Payment")">Payment</a></li>
+                <li><a>Wallets</a></li>
+                <li><a>Settlements</a></li>*@
+                    </ul>
+
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "AdministratorsOnly")).Succeeded)
+                    {
+
+
+                        <p class="menu-label">
+                            Administration
+                        </p>
+                        <ul class="menu-list">
+                            <li><a href="@Url.Action("users","Account")">Users</a></li>
+                            <li><a href="@Url.Action("Index","Service")">Services</a></li>
+                        </ul>
+
+                    }
+                    <p class="menu-label">
+                        Settings
+                    </p>
+                    <ul class="menu-list">
+                        <li><a href="@Url.Action("ChangePassword","Account")">Security</a></li>
+                        @*<li><a href="@Url.Action("Index","Payment")">Payment</a></li>
+                <li><a>Wallets</a></li>
+                <li><a>Settlements</a></li>*@
+                    </ul>
+
+
+                </aside>
+        </div>
+        <div class="column">
+            <div class="container main-content">
+
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>
+@RenderSection("Footer", false)
+
+@RenderSection("Script", false)

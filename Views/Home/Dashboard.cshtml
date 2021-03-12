@@ -1,0 +1,113 @@
+﻿@model IEnumerable<FirstApp.Models.Transaction>
+@{
+    Layout = "_Dashboard";
+}
+@section Title {
+    <title>Biller.ng - Dashboard </title>
+}
+
+
+@*@await (Component.InvokeAsync<FirstApp.ViewComponents.Statistics>())*@
+
+@{
+    var amountTotal = Model.Sum(x => x.Amount);
+    var amountTotalToday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.Date).Sum(x => x.Amount);
+    var amountTotalYesterday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.AddDays(-1).Date).Sum(x => x.Amount);
+    var amountReceivable = Model.Sum(x => x.Amount) * (0.035);
+    var amountReceivableToday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.Date).Sum(x => x.Amount) * (0.035);
+    var amountReceivableYesterday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.AddDays(-1).Date).Sum(x => x.Amount) * (0.035);
+    var amountPayable = Model.Sum(x => x.Amount) - amountReceivable;
+    var amountPayableToday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.Date).Sum(x => x.Amount) - amountReceivableToday;
+    var amountPayableYesterday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.AddDays(-1).Date).Sum(x => x.Amount) - amountReceivableYesterday;
+}
+<nav class="breadcrumb is-small" aria-label="breadcrumbs">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li class="is-active"><a href="#" aria-current="page">Dashboard</a></li>
+    </ul>
+</nav>
+@if (User.IsInRole("Root") || User.IsInRole("Administrator") || User.IsInRole("ExSupervisor"))
+{
+    @await Html.PartialAsync("_StatsCardKedco", Model)
+}
+else
+{
+    @await Html.PartialAsync("_StatsCard", Model)
+}
+
+
+<div class="level mt-2 mr-2 content-title">
+    <div class="level-left">
+        <div class="level-item">
+            <div class="title has-text-primary">
+                <span class="icon is-small icon-title">
+                    <i class="fa fa-tachometer"></i>
+                </span>
+                <span>Dashboard</span>
+            </div>
+        </div>
+    </div>
+    <div class="level-right">
+        <div class="level-item">
+            @*<button type="button" class="button is-small">November 18, 20120 - November 25, 2020</button>*@
+        </div>
+    </div>
+</div>
+
+
+
+<div class="chart">
+    <div class="card">
+        <div class="card-content">
+            <canvas id="chart" height="120"></canvas>
+        </div>
+    </div>
+
+</div>
+
+
+@section Script {
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+    <script>
+        const ctx = document.getElementById('chart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['February'],
+                datasets: [{
+                    label: '# monthly transactions',
+                    data: [ @amountTotal],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+}
+

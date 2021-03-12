@@ -1,0 +1,10 @@
+.vscode/
+.platform/*
+.ebextensions/*
+appsettings.*
+config.*
+bin/
+Migrations/
+obj/
+Properties/
+*.db
