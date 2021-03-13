@@ -13,14 +13,13 @@ using FirstApp.Helpers;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using FirstApp.Helpers;
 using FirstApp.Services;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace FirstApp.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrator, Root")]
     [Route("account")]
     [ApiExplorerSettings(IgnoreApi = true)]
     public class AccountController : Controller
@@ -68,11 +67,80 @@ namespace FirstApp.Controllers
             return View(users);
         }
 
+        [Route("users/{UserId}")]
+        [HttpGet]
+        public IActionResult UserAccount(string UserId)
+        {
+        
+            var user = _userManager.Users.FirstOrDefault(x => x.Id == UserId);
+            var wallets = _DB.Wallets.Where(x => x.User == user);
+            var paymentPlans = _DB.CustomerPaymentPlans.Where(x => x.User == user).ToList();
+
+            var BankAccounts = _DB.ReservedAccounts.Where(x => x.User == user).ToList();
+
+            var VM = new UserAccountVM{
+                User = user,
+                PaymentPlans = paymentPlans,
+                BankAccounts = BankAccounts
+            };
+
+
+            return View(VM);
+        }   
+        [Route("users/payment/plan")]
+        [HttpPost]
+        public IActionResult AddUserPaymentPlan([FromForm] AddUserPaymentPlanVM request)
+        {
+            if(!ModelState.IsValid){
+                return RedirectToAction("users", "Account", new { id = request.UserId});
+            }
+
+            var user = _DB.Users.FirstOrDefault(x => x.Id == request.UserId);
+            var plan = _DB.PaymentPlans.FirstOrDefault(x => x.Id == request.PaymentPlanId);
+            
+            var planexist = _DB.CustomerPaymentPlans.FirstOrDefault(x => x.User == user && x.PaymentPlan.ServicePlan.Service == plan.ServicePlan.Service && x.PaymentPlan.ServicePlan == plan.ServicePlan);
+
+            if(planexist != null){
+
+                return RedirectToAction("users", "Account", new { id = request.UserId});
+
+            } else {
+                 _DB.CustomerPaymentPlans.Add(new CustomerPaymentPlan {
+                    User=user,
+                    PaymentPlan=plan
+                });
+                _DB.SaveChanges();
+            }
+           
+
+            
+
+            return RedirectToAction("users", "Account", new { id = request.UserId});
+        }
+
+        [Route("users/wallet/fund")]
+        [HttpPost]
+        public IActionResult FundUserWallet([FromForm] FundUserWalletVM request)
+        {
+            if(!ModelState.IsValid){
+                return RedirectToAction("users", "Account", new { id = request.UserId});
+            }
+
+            var user = _DB.Users.FirstOrDefault(x => x.Id == request.UserId);
+            var wallet = _DB.Wallets.FirstOrDefault(x => x.User == user);
+            
+            wallet.BookBalance = wallet.Balance;
+            wallet.Balance = wallet.Balance + request.Amount;
+            
+            _DB.SaveChanges();
+
+            return RedirectToAction("users", "Account", new { id = request.UserId});
+        }
+
         [Route("users/data")]
         [HttpGet]
         public IActionResult UsersData()
         {
-
 
             var users = _userManager.Users.Select(x => new ApplicationUser {
                 Id = x.Id,
@@ -184,12 +252,14 @@ namespace FirstApp.Controllers
 
 
                 if (newReserverdAccount == null  || String.IsNullOrEmpty(newReserverdAccount.accountNumber)) {
+                    _logger.LogDebug(newReserverdAccount.ToString());
                     ModelState.AddModelError(String.Empty, "Couldn't create Bank Account at the moment. Please Try again later.");
                     return StatusCode(501, new
                     {
                         ok = false,
                         error = "BANK_ACCOUNT_CREATION_FAILED"
                     });
+
 
                 }
                 else
@@ -203,6 +273,7 @@ namespace FirstApp.Controllers
                         BankName = newReserverdAccount.bankName,
                         BankCode = newReserverdAccount.bankCode,
                         AccountReservationRef = newReserverdAccount.reservationReference,
+                        BVN = newReserverdAccount.customerBVN,
                         User = user,
                         Wallet = Wallet,
                         Status = newReserverdAccount.status
@@ -578,37 +649,32 @@ namespace FirstApp.Controllers
 
             _DB.SaveChanges();
 
-            var newReserverdAccount = await _monnify.CreateReservedAccount(new CreateReservedAccount
-            {
-                AccountName = $"{newAccount.FirstName} {newAccount.MiddleName} {newAccount.LastName} ",
-                AccountReference = newAccount.Id,
-                CurrencyCode = "NGN",
-                ContractCode = "5853271866",
-                CustomerName = $"{newAccount.FirstName} {newAccount.MiddleName} {newAccount.LastName} ",
-                CustomerEmail = newAccount.Email
-            });
+            // var newReserverdAccount = await _monnify.CreateReservedAccount(new CreateReservedAccount
+            // {
+            //     AccountName = $"{newAccount.FirstName} {newAccount.MiddleName} {newAccount.LastName} ",
+            //     AccountReference = newAccount.Id,
+            //     CurrencyCode = "NGN",
+            //     ContractCode = "5853271866",
+            //     CustomerName = $"{newAccount.FirstName} {newAccount.MiddleName} {newAccount.LastName} ",
+            //     CustomerEmail = newAccount.Email
+            // });
 
-            var reservedAccount = _DB.ReservedAccounts.Add(new ReservedAccount
-            {
-                AccountNumber = newReserverdAccount.accountNumber,
-                AccountName = newReserverdAccount.accountName,
-                AccountCurrency = newReserverdAccount.currencyCode,
-                AccountRef = newReserverdAccount.accountReference,
-                BankName = newReserverdAccount.bankName,
-                BankCode = newReserverdAccount.bankCode,
-                AccountReservationRef = newReserverdAccount.reservationReference,
-                User = newAccount,
-                Wallet = wallet,
-                Status = newReserverdAccount.status
+            // var reservedAccount = _DB.ReservedAccounts.Add(new ReservedAccount
+            // {
+            //     AccountNumber = newReserverdAccount.accountNumber,
+            //     AccountName = newReserverdAccount.accountName,
+            //     AccountCurrency = newReserverdAccount.currencyCode,
+            //     AccountRef = newReserverdAccount.accountReference,
+            //     BankName = newReserverdAccount.bankName,
+            //     BankCode = newReserverdAccount.bankCode,
+            //     AccountReservationRef = newReserverdAccount.reservationReference,
+            //     User = newAccount,
+            //     Wallet = wallet,
+            //     Status = newReserverdAccount.status
 
-            }) ;
+            // }) ;
 
-
-
-
-
-
-            _DB.SaveChanges();
+            // _DB.SaveChanges();
 
             return RedirectToAction("users");
 

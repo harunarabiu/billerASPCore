@@ -4,15 +4,15 @@
 @*@await (Component.InvokeAsync<FirstApp.ViewComponents.Statistics>())*@
 
 @{
-    var amountTotal = Model.Sum(x => x.Amount);
-    var amountTotalToday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.Date).Sum(x => x.Amount);
-    var amountTotalYesterday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.AddDays(-1).Date).Sum(x => x.Amount);
-    var amountReceivable = Model.Sum(x => x.Amount) * (0.035);
-    var amountReceivableToday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.Date).Sum(x => x.Amount) * (0.035);
-    var amountReceivableYesterday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.AddDays(-1).Date).Sum(x => x.Amount) * (0.035);
-    var amountPayable = Model.Sum(x => x.Amount) - amountReceivable;
-    var amountPayableToday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.Date).Sum(x => x.Amount) - amountReceivableToday;
-    var amountPayableYesterday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.AddDays(-1).Date).Sum(x => x.Amount) - amountReceivableYesterday;
+    var amountTotal = Model.Where(x => x.Status == "Success").Sum(x => x.Amount);
+    var amountTotalToday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.Date && x.Status == "Success").Sum(x => x.Amount);
+    var amountTotalYesterday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.AddDays(-1).Date && x.Status == "Success").Sum(x => x.Amount);
+    var amountReceivable = Model.Where(x => x.Status == "Success").Sum(x => x.Amount) * (0.035);
+    var amountReceivableToday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.Date && x.Status == "Success").Sum(x => x.Amount) * (0.035);
+    var amountReceivableYesterday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.AddDays(-1).Date && x.Status == "Success").Sum(x => x.Amount) * (0.035);
+    var amountPayable = Model.Where(x => x.Status == "Success").Sum(x => x.Amount) - amountReceivable;
+    var amountPayableToday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.Date && x.Status == "Success").Sum(x => x.Amount) - amountReceivableToday;
+    var amountPayableYesterday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.AddDays(-1).Date && x.Status == "Success").Sum(x => x.Amount) - amountReceivableYesterday;
 }
 
 <div class="columns is-multiline">

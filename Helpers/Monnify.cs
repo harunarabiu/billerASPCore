@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Castle.Core.Logging;
+using Microsoft.Extensions.Logging;
 using FirstApp.Models;
 using FirstApp.Models.ViewModels;
 using FirstApp.Services;
@@ -20,7 +20,7 @@ namespace FirstApp.Helpers
         //private readonly ILogger _logger;
         private readonly IMonnifyApi _monnifyApi;
         private readonly IConfiguration _configuration;
-
+        private readonly ILogger _logger;
         private string base64Credentials;
         private string MONNIFY_CLIENT_SECRET;
         private string MONNIFY_APIKEY;
@@ -31,7 +31,8 @@ namespace FirstApp.Helpers
             DBDataContext DB,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signinManager,
-            //ILoggerFactory loggerFactory,
+            ILoggerFactory loggerFactory,
+            
             IMonnifyApi monnifyApi,
             IConfiguration configuration
         // RoleManager<ApplicationUser> roleManager)
@@ -40,7 +41,7 @@ namespace FirstApp.Helpers
             _DB = DB;
             _userManager = userManager;
             _signInManager = signinManager;
-            //_logger = loggerFactory.CreateLogger<Monnify>();
+            _logger = loggerFactory.CreateLogger<Monnify>();
             _monnifyApi = monnifyApi;
             _configuration = configuration;
 
@@ -116,7 +117,7 @@ namespace FirstApp.Helpers
                 AccountDetails.CurrencyCode = "NGN";
 
                 var newAccount = await _monnifyApi.CreateReservedAccountAsync($"Bearer {token}", AccountDetails);
-
+                _logger.LogDebug(newAccount.ToString());
                 newReservedAccount = newAccount.responseBody;
 
                 return newReservedAccount;

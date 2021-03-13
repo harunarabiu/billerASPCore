@@ -1,0 +1,376 @@
+@model FirstApp.Models.ViewModels.UserAccountVM
+
+@{
+
+    Layout = "_Dashboard";
+}
+
+@section Title {
+    <title>Biller.ng - User Accounts </title>
+}
+
+@section Style {
+<style>
+    .modal-card-head {
+        background-color: #fff;
+        border-bottom: 0
+    }
+    .modal-card-foot {
+        background-color: #fff;
+        border-top: 0;
+    }
+</style>
+}
+
+
+<nav class="breadcrumb is-small" aria-label="breadcrumbs">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li class="is-active"><a href="#" aria-current="page"> User Account</a></li>
+    </ul>
+</nav>
+
+<div class="level mt-2 mr-2 content-title">
+    <div class="level-left">
+        <div class="level-item">
+            <div class="title has-text-primary">
+                <span>Accounts</span>
+            </div>
+        </div>
+    </div>
+    <div class="level-right">
+        <div class="level-item">
+            @* <button type="button" class="button is-small">March 8, 2017 - April 6, 2017</button> *@
+        </div>
+    </div>
+</div>
+<div class="level mt-2 mr-2 content-title">
+    <div class="level-left">
+        <div class="level-item">
+            <div class="title is-4 has-text-primary">
+                <span>Bio Data</span>
+            </div>
+        </div>
+    </div>
+    <div class="level-right">
+        <div class="level-item">
+            @* <button type="button" id="addplan" class="button is-small is-primary"> Add Plan </button> *@
+        </div>
+    </div>
+</div>
+
+<div class="card">
+  
+  <div class="card-content">
+    <div class="content">
+        <div class="level">
+    
+            <div class="">
+                
+                    <div class="title is-6">
+                        <span>First Name</span>
+                    </div>
+              
+                    <div class="sub-title is-3 has-text-primary">
+                        <span>@Model.User.FirstName</span>
+                    </div>
+               
+                
+            </div>
+            <div class="">
+                    <div class="title is-6 ">
+                        <span>Middle Name</span>
+                    </div>
+                    <div class="sub-title is-3 has-text-primary">
+                        <span>@Model.User.MiddleName</span>
+                    </div>
+            </div>
+            <div class="">
+                <div class="title is-6">
+                        <span>Last Name</span>
+                    </div>
+                    <div class="sub-title is-3 has-text-primary">
+                        <span>@Model.User.LastName</span>
+                    </div>
+            </div>
+            <div class="">
+                <div class="title is-6">
+                        <span>Business</span>
+                    </div>
+                    <div class="sub-title is-3 has-text-primary">
+                        @* <span>@Model.User.LastName</span> *@
+                    </div>
+            </div>
+        </div>
+         <div class="level">
+    
+            <div class="">
+                
+                    <div class="title is-6">
+                        <span>Email</span>
+                    </div>
+              
+                    <div class="sub-title is-3 has-text-primary">
+                        <span>@Model.User.Email</span>
+                    </div>
+               
+                
+            </div>
+            <div class="">
+                    <div class="title is-6 ">
+                        <span>Phone</span>
+                    </div>
+                    <div class="sub-title is-3 has-text-primary">
+                        <span>@Model.User.PhoneNumber</span>
+                    </div>
+            </div>
+            <div class="">
+                @* <div class="title is-6">
+                        <span>Last Name</span>
+                    </div>
+                    <div class="sub-title is-3 has-text-primary">
+                        <span>@Model.User.LastName</span>
+                    </div> *@
+            </div>
+            <div class="">
+                @* <div class="title is-6">
+                        <span>Business</span>
+                    </div>
+                    <div class="sub-title is-3 has-text-primary">
+                        <span>@Model.User.LastName</span>
+                    </div> *@
+            </div>
+        </div>
+    </div>
+    </div>
+  </div>
+</div>
+<br>
+<br>
+
+
+<div class="level mt-2 mr-2 content-title">
+    <div class="level-left">
+        <div class="level-item">
+            <div class="title is-4 has-text-primary">
+                <span>Payment Plans</span>
+            </div>
+        </div>
+    </div>
+    <div class="level-right">
+        <div class="level-item">
+            <button type="button" id="addplan" class="button is-small is-primary"> Add Plan </button>
+        </div>
+    </div>
+</div>
+
+<table class="table is-bordered is-striped is-narrow is-fullwidth mt-4">
+            <thead>
+                <tr>
+                    <th>Name</th>
+
+                    <th>Service</th>
+                    <th>Service Plan</th>
+                    <th>Commission</th>
+                    <th>Commission Type</th>
+                    <th>Convience Fee</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var plan in Model.PaymentPlans)
+                {
+                    <tr>
+                        <td> @plan.PaymentPlan.Name</td>
+                        <td>@plan.PaymentPlan.ServicePlan?.Service.Name</td>
+                        <td>@plan.PaymentPlan.ServicePlan?.Name</td>
+                        <td>@plan.PaymentPlan.Commission</td>
+                        <td>@plan.PaymentPlan.CommissionType</td>
+                        <td>@plan.PaymentPlan.ConvienceFee</td>
+                        <td><span class="tag is-info">@plan.PaymentPlan.Status</span></td>
+
+                        <td>
+                            <a class="button is-danger is-small">
+                                <span class="icon is-small"> <i class="fa fa-trash"></i> </span><span>Delete</span>
+                            </a>
+                        </td>
+                    </tr>
+
+                }
+
+            </tbody>
+        </table>
+        <br>
+        <br>
+
+
+<div class="level mt-2 mr-2 content-title">
+    <div class="level-left">
+        <div class="level-item">
+            <div class="title is-4 has-text-primary">
+                <span>Wallets</span>
+            </div>
+        </div>
+    </div>
+    <div class="level-right">
+        <div class="level-item">
+            <button type="button" onclick="showModal('fundwallet')" class="button is-small is-primary"> Fund Wallet </button>
+        </div>
+    </div>
+</div>
+<table class="table is-bordered is-striped is-narrow is-fullwidth mt-4">
+            <thead>
+                <tr>
+                    <th>Name</th>
+
+                    <th>Bank Name</th>
+                    <th>Account Number</th>
+                    <th>BVN</th>
+                    <th>Balance</th>
+                    <th>Book Balance</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var wallet in Model.BankAccounts)
+                {
+                    <tr>
+                        <td> @wallet.AccountName</td>
+                        <td>@wallet.BankName </td>
+                        <td> @wallet.AccountNumber </td>
+                        <td> @wallet.BVN </td>
+                        <td>@wallet.Wallet.Balance</td>
+                        <td>@wallet.Wallet.BookBalance</td>
+                        <td><span class="tag is-info">@wallet.Status</span></td>
+
+                        <td>
+                            <a class="button is-primary is-small">
+                                <span class="icon is-small"> <i class="fa fa-edit"></i> </span><span>Fund</span>
+                            </a>
+                            
+                        </td>
+                    </tr>
+
+                }
+
+            </tbody>
+        </table>
+        <br>
+        <br>
+
+
+
+
+
+<<div class="modal" id="fundwallet">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <button class="delete is-pulled-right" aria-label="close" onclick="hideModal('fundwallet')"></button>
+        </header>
+        <section class="modal-card-body">
+            <div class="title is-4 has-text-centered">Add Payment plan</div>
+            <form role="form" action="/account/users/wallet/fund" method="post">
+                <input name="UserId" value="@Model.User.Id" id="UserId" type="hidden">
+                 <div class="field">
+                    <label class="label">Amount</label>
+                    <div class="control">
+                        <input name="Amount" class="input" placeholder="Amount">
+                        
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-primary is-pulled-right" type="submit"> Submit </button>
+                    </div>
+                </div>
+                 
+            </form>
+        </section>
+        <footer class="modal-card-foot">
+            @* <button class="button is-pulled-right" onclick="hideModal('addpaymentplan')">Close</button> *@
+        </footer>
+    </div>
+</div>
+
+<div class="modal" id="addpaymentplan">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <button class="delete is-pulled-right" aria-label="close" onclick="hideModal('addpaymentplan')"></button>
+        </header>
+        <section class="modal-card-body">
+            <div class="title is-4 has-text-centered">Add Payment plan</div>
+            <form role="form" action="/account/users/payment/plan" method="post">
+                <input name="UserId" value="@Model.User.Id" id="BVN" type="hidden">
+                 <div class="field">
+                    <label class="label">Payment Plan</label>
+                    <div class="control">
+                        <div class="select is-fullwidth">
+                            <select id="paymentplan" name="PaymentPlanId">
+                                <option>Select Payment Plan</option>
+                            </select>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-primary is-pulled-right" type="submit"> Submit </button>
+                    </div>
+                </div>
+                 
+            </form>
+        </section>
+        <footer class="modal-card-foot">
+            @* <button class="button is-pulled-right" onclick="hideModal('addpaymentplan')">Close</button> *@
+        </footer>
+    </div>
+</div>
+
+
+@section script {
+    <script>
+        function showModal(modalId) {
+            var modal = document.getElementById(modalId);
+            modal.classList.add("is-active");
+        }
+
+
+        function hideModal(modalId) {
+            var modal = document.getElementById(modalId);
+            modal.classList.remove("is-active");
+        }
+        function populateServices(){
+            $.ajax("/services/data")
+        };
+        function populatePaymentPlans(){
+            var paymentPlans = document.getElementById("paymentPlan")
+            $.ajax("/services/payment/plan/data")
+        };
+
+        $(function () {
+
+            $("#addplan").click(function(){
+                $.get("/services/payment/plan/data", function(response, status){
+                    console.log("Payment plan: ",response);
+                   var data = response.data;
+                   var sel = $("#paymentplan");
+                   sel.empty();
+                    for (var i=0; i<data.length; i++) {
+                        console.log(i)
+                        sel.append('<option value="' + data[i].id + '">' + data[i].servicePlan.service.name + " - " + data[i].name + '</option>');
+                    }
+                    
+                });
+                showModal("addpaymentplan")
+            });
+
+        })
+        
+    </script>
+}

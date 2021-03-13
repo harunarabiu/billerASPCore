@@ -67,6 +67,9 @@ namespace FirstApp.Services
         [JsonProperty(PropertyName = "bankName")]
         public string bankName { get; set; }
 
+        [JsonProperty(PropertyName = "customerBVN")]
+        public string customerBVN {get; set; }
+
         [JsonProperty(PropertyName = "bankCode")]
         public string bankCode { get; set; }
 
@@ -77,7 +80,7 @@ namespace FirstApp.Services
         [JsonProperty(PropertyName = "status")]
         public string status { get; set; }
 
-        [JsonProperty(PropertyName = "rcreatedOn")]
+        [JsonProperty(PropertyName = "createdOn")]
         public string createdOn { get; set; }
     }
 

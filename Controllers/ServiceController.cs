@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using FirstApp.Models;
+using FirstApp.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ namespace FirstApp.Controllers
     [Authorize]
     [Route("services")]
     [ApiExplorerSettings(IgnoreApi = true)]
-    public class ServiceController : Controller
+    public class ServiceController : BaseController
     {
 
         private readonly DBDataContext _DB;
@@ -47,24 +48,51 @@ namespace FirstApp.Controllers
 
         // GET: /<controller>/
 
-        
+        [Route("")]
         public IActionResult Index()
         {
+            Notify("this should be ignored");
             var services = _DB.Services.ToList();
             return View(services);
         }
 
-        [HttpPost]
-        public IActionResult Service()
+        [HttpGet]
+        [Route("create")]
+        public IActionResult Create()
         {
+            var service = new CreateServiceVM();
+
+            return View(service);
+        }
 
 
+
+        [HttpPost]
+        public IActionResult Create(CreateServiceVM data)
+        {
+            var serviceType = _DB.ServiceTypes.FirstOrDefault(x => x.Id == data.ServiceType);
+
+            var service = _DB.Services.Add(new Service {
+                Name = data.Name,
+                ServiceType = serviceType,
+                Key = data.Name
+            });
+            return View(service);
+        }
+
+
+
+        [HttpGet]
+        [Route("update")]
+        public IActionResult Update (long ServiceId)
+        {
             return View();
         }
 
 
         [Route("type")]
         [HttpPost]
+        
         public IActionResult ServiceType()
         {
 
