@@ -277,13 +277,15 @@ namespace FirstApp.Controllers
 
             _DB.Transactions.Add(transaction);
             _DB.SaveChanges();
-
-            transaction.User = new ApplicationUser
-            {
-                Id = transaction.User.Id,
-                FirstName = transaction.User.FirstName,
-                LastName = transaction.User.LastName
-            };
+            if(transaction.User !=null){
+                transaction.User = new ApplicationUser
+                {
+                    Id = transaction.User.Id,
+                    FirstName = transaction.User.FirstName,
+                    LastName = transaction.User.LastName
+                };
+            }
+            
 
             return Ok(new { data = transaction });
         }
@@ -386,13 +388,15 @@ namespace FirstApp.Controllers
 
                         return StatusCode(500);
                     }
-
-                    transaction.User = new ApplicationUser
-                    {
-                        Id = transaction.User.Id,
-                        FirstName = transaction.User.FirstName,
-                        LastName = transaction.User.LastName
-                    };
+                    if(transaction.User !=null){
+                        
+                        transaction.User = new ApplicationUser
+                        {
+                            Id = transaction.User.Id,
+                            FirstName = transaction.User.FirstName,
+                            LastName = transaction.User.LastName
+                        };
+                    }
 
                     return Ok(new { data = transaction, ok=true });
 
