@@ -254,11 +254,14 @@ namespace FirstApp.Controllers
                 if (newReserverdAccount == null  || String.IsNullOrEmpty(newReserverdAccount.accountNumber)) {
                     _logger.LogDebug(newReserverdAccount.ToString());
                     ModelState.AddModelError(String.Empty, "Couldn't create Bank Account at the moment. Please Try again later.");
-                    return StatusCode(501, new
-                    {
-                        ok = false,
-                        error = "BANK_ACCOUNT_CREATION_FAILED"
-                    });
+                    //return StatusCode(501, new
+                    //{
+                    //    ok = false,
+                    //    error = "BANK_ACCOUNT_CREATION_FAILED"
+                    //});
+
+                    return RedirectToAction("AccountBalance", "Account");
+
 
 
                 }
@@ -290,11 +293,13 @@ namespace FirstApp.Controllers
 
             } else
             {
-                return StatusCode(501, new
-                {
-                    ok = false,
-                    error = "ACCOUNT_ALREADY_EXIST"
-                });
+                //return StatusCode(501, new
+                //{
+                //    ok = false,
+                //    error = "ACCOUNT_ALREADY_EXIST"
+                //});
+                return RedirectToAction("AccountBalance", "Account");
+
             }
 
             var AccountBalance = new AccountBalanceVM

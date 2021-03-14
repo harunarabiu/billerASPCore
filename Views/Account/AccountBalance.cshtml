@@ -164,17 +164,23 @@
             <form role="form" action="/account/bank/create" method="post">
 
                 <div class="field">
-                    <label class="label"></label>
+                    <label class="label">Bank Verification Number (BVN)</label>
                     <div class="control">
                         <input name="BVN" id="BVN" class="input" placeholder="Enter your 11 digit BVN">
                     </div>
-                    <button class="button is-pulled-right">Submit</button>
+                </div>
+
+                 <div class="field is-grouped is-pulled-right">
+                    <div class="control">
+                        <button class="button is-pulled-right is-primary">Submit</button>
+                    </div>
+
                 </div>
 
             </form>
         </section>
         <footer class="modal-card-foot">
-            <button class="button is-primary is-pulled-right" onclick="hideModal('CreateBankAccount')">Close</button>
+            @* <button class="button is-primary is-pulled-right" onclick="hideModal('CreateBankAccount')">Close</button> *@
         </footer>
     </div>
 </div>

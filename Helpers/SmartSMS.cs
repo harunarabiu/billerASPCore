@@ -11,10 +11,21 @@ namespace FirstApp.Helpers
         
 
         private readonly ISmartSMSAPI _smartSMSAPI;
+        private string SMARTSMS_ACCESS_TOKEN;
 
         public SmartSMS(ISmartSMSAPI smartSMSAPI)
         {
             _smartSMSAPI = smartSMSAPI;
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            {
+                SMARTSMS_ACCESS_TOKEN = Environment.GetEnvironmentVariable("SMARTSMS_TEST_ACCESS_TOKEN");
+
+            }
+            else
+            {
+                SMARTSMS_ACCESS_TOKEN = Environment.GetEnvironmentVariable("SMARTSMS_ACCESS_TOKEN");
+                
+            }
         }
 
         public async Task<dynamic> Send(SmartSMSSendSMSVM request)
@@ -64,7 +75,7 @@ namespace FirstApp.Helpers
                 Message = Text,
                 Routing = "3",
                 Type = "0",
-                token = "KFDay3NhfIyINOM7p4yTogC8HkzFfaE3nyKswvDhGYkWrgvVoIrn7OTDYvFuknnxpUGS2lXgjUrM4SPZmlAjBziF86vjSIotxYTJ"
+                token = SMARTSMS_ACCESS_TOKEN
             };
 
             var SMSResponse = this.Send(SMS);

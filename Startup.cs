@@ -72,11 +72,18 @@ namespace FirstApp
             var DB_NAME = Environment.GetEnvironmentVariable("DB_NAME");
 
             var KEDCO_ENDPOINT = Environment.GetEnvironmentVariable("KEDCO_TEST_ENDPOINT");
+            var MONNIFY_ENDPOINT = Environment.GetEnvironmentVariable("MONNIFY_TEST_ENDPOINT");
+            var SMARTSMS_ENDPOINT = Environment.GetEnvironmentVariable("SMARTSMS_TEST_ENDPOINT");
+            var GLADE_ENDPOINT = Environment.GetEnvironmentVariable("GLADE_TEST_ENDPOINT");
 
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
             {
 
                 KEDCO_ENDPOINT = Environment.GetEnvironmentVariable("KEDCO_ENDPOINT");
+                MONNIFY_ENDPOINT = Environment.GetEnvironmentVariable("MONNIFY_ENDPOINT");
+                GLADE_ENDPOINT = Environment.GetEnvironmentVariable("GLADE_ENDPOINT");
+                SMARTSMS_ENDPOINT = Environment.GetEnvironmentVariable("SMARTSMS_ENDPOINT");
+
                 services.AddDbContextPool<DBDataContext>(options =>
                 {
 
@@ -144,11 +151,11 @@ namespace FirstApp
 
             services.AddHttpClient("monnify", c =>
             {
-                c.BaseAddress = new Uri("https://sandbox.monnify.com/api");
+                c.BaseAddress = new Uri(MONNIFY_ENDPOINT);
             }).AddTypedClient(c => RestService.For<IMonnifyApi>(c));
             services.AddHttpClient("gladepay", c =>
             {
-                c.BaseAddress = new Uri("https://demo.api.gladepay.com");
+                c.BaseAddress = new Uri(GLADE_ENDPOINT);
             }).AddTypedClient(c => RestService.For<IGladePayAPI>(c));
 
             services.AddHttpClient("MultiTexter", c =>
@@ -158,7 +165,7 @@ namespace FirstApp
 
             services.AddHttpClient("SmartSMS", c =>
             {
-                c.BaseAddress = new Uri("https://smartsmssolutions.com/api");
+                c.BaseAddress = new Uri(SMARTSMS_ENDPOINT);
             }).AddTypedClient(c => RestService.For<ISmartSMSAPI>(c));
 
             // options.UseSqlite(

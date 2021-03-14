@@ -128,6 +128,7 @@ namespace FirstApp.Helpers
             catch (ApiException exception)
             {
                  new Exception($"Content: {exception.Content} Message: ${exception.Message} Headers: ${exception.Headers}");
+                _logger.LogDebug(exception.Content.ToString());
                 // other exception handling
             } catch (Exception ex)
             {

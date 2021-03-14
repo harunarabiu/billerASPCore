@@ -264,7 +264,7 @@
 
 
 
-<<div class="modal" id="fundwallet">
+<div class="modal" id="fundwallet">
     <div class="modal-background"></div>
     <div class="modal-card">
         <header class="modal-card-head">
@@ -278,7 +278,6 @@
                     <label class="label">Amount</label>
                     <div class="control">
                         <input name="Amount" class="input" placeholder="Amount">
-                        
                     </div>
                 </div>
 
@@ -360,7 +359,7 @@
                     console.log("Payment plan: ",response);
                    var data = response.data;
                    var sel = $("#paymentplan");
-                   sel.empty();
+                   //sel.empty();
                     for (var i=0; i<data.length; i++) {
                         console.log(i)
                         sel.append('<option value="' + data[i].id + '">' + data[i].servicePlan.service.name + " - " + data[i].name + '</option>');
