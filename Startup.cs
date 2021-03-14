@@ -399,7 +399,8 @@ namespace FirstApp
                 var serviceType = new ServiceType
                 {
                     Name = "Electricity",
-                    Key = "Electricity"
+                    Key = "Electricity",
+                    Status = "Active"
                 };
 
                 _DB.ServiceTypes.Add(serviceType);
@@ -411,7 +412,7 @@ namespace FirstApp
                     Name = "KEDCO",
                     Key = "kedco",
                     ServiceType = serviceType,
-
+                    Status = "Active"
                 };
 
                 _DB.Services.Add(service);
@@ -428,7 +429,8 @@ namespace FirstApp
                     IsDefault = true,
                     CommissionType = "Variable",
                     Commission = 3.5,
-                    ConvienceFee = 50
+                    ConvienceFee = 50,
+                    Status = "Active"
 
                 };
                 _DB.ServicePlans.Add(serviceplanprepaid);
@@ -442,7 +444,8 @@ namespace FirstApp
                     IsDefault = true,
                     CommissionType = "Variable",
                     Commission = 3.5,
-                    ConvienceFee = 50
+                    ConvienceFee = 50,
+                    Status = "Active"
 
                 };
                 _DB.ServicePlans.Add(serviceplanpostpaid);
@@ -457,7 +460,6 @@ namespace FirstApp
                     CommissionType = "Variable",
                     Commission = 2,
                     ConvienceFee = 50
-
                 });
                 _DB.PaymentPlans.Add(new PaymentPlan
                 {

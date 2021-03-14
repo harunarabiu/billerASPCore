@@ -73,7 +73,7 @@ namespace FirstApp.Controllers
         {
         
             var user = _userManager.Users.FirstOrDefault(x => x.Id == UserId);
-            var wallets = _DB.Wallets.Where(x => x.User == user);
+            var wallets = _DB.Wallets.Where(x => x.User == user).ToList();
             var paymentPlans = _DB.CustomerPaymentPlans.Where(x => x.User == user).ToList();
 
             var BankAccounts = _DB.ReservedAccounts.Where(x => x.User == user).ToList();
@@ -81,6 +81,7 @@ namespace FirstApp.Controllers
             var VM = new UserAccountVM{
                 User = user,
                 PaymentPlans = paymentPlans,
+                Wallets = wallets,
                 BankAccounts = BankAccounts
             };
 
@@ -276,7 +277,7 @@ namespace FirstApp.Controllers
                         BankName = newReserverdAccount.bankName,
                         BankCode = newReserverdAccount.bankCode,
                         AccountReservationRef = newReserverdAccount.reservationReference,
-                        BVN = newReserverdAccount.customerBVN,
+                        BVN = request.BVN,
                         User = user,
                         Wallet = Wallet,
                         Status = newReserverdAccount.status
@@ -291,8 +292,7 @@ namespace FirstApp.Controllers
 
                 }
 
-            } else
-            {
+            } else {
                 //return StatusCode(501, new
                 //{
                 //    ok = false,
@@ -646,7 +646,9 @@ namespace FirstApp.Controllers
             {
                 Balance = 0.0,
                 BookBalance = 0.0,
-                User = newAccount
+                User = newAccount,
+                Status = "Active"
+                
             };
 
             var newWallet = _DB.Wallets.Add(wallet);

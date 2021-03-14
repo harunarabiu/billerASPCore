@@ -222,13 +222,58 @@
 <table class="table is-bordered is-striped is-narrow is-fullwidth mt-4">
             <thead>
                 <tr>
+                    <th>Balance</th>
+                    <th>Book Balance</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var wallet in Model.Wallets)
+                {
+                    <tr>
+                        <td>@wallet.Balance</td>
+                        <td>@wallet.BookBalance</td>
+                        <td><span class="tag is-info">@wallet.Status</span></td>
+
+                        <td>
+                            <a class="button is-primary is-small">
+                                <span class="icon is-small"> <i class="fa fa-edit"></i> </span><span onclick="showModal('fundwallet')" >Fund</span>
+                            </a>
+                            
+                        </td>
+                    </tr>
+
+                }
+
+            </tbody>
+        </table>
+        <br>
+        <br>
+
+
+<div class="level mt-2 mr-2 content-title">
+    <div class="level-left">
+        <div class="level-item">
+            <div class="title is-4 has-text-primary">
+                <span>Bank Accounts</span>
+            </div>
+        </div>
+    </div>
+    <div class="level-right">
+        <div class="level-item">
+            @* <button type="button" onclick="showModal('fundwallet')" class="button is-small is-primary"> Fund Wallet </button> *@
+        </div>
+    </div>
+</div>
+<table class="table is-bordered is-striped is-narrow is-fullwidth mt-4">
+            <thead>
+                <tr>
                     <th>Name</th>
 
                     <th>Bank Name</th>
                     <th>Account Number</th>
                     <th>BVN</th>
-                    <th>Balance</th>
-                    <th>Book Balance</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -241,13 +286,11 @@
                         <td>@wallet.BankName </td>
                         <td> @wallet.AccountNumber </td>
                         <td> @wallet.BVN </td>
-                        <td>@wallet.Wallet.Balance</td>
-                        <td>@wallet.Wallet.BookBalance</td>
                         <td><span class="tag is-info">@wallet.Status</span></td>
 
                         <td>
                             <a class="button is-primary is-small">
-                                <span class="icon is-small"> <i class="fa fa-edit"></i> </span><span>Fund</span>
+                                <span class="icon is-small"> <i class="fa fa-edit"></i> </span><span></span>
                             </a>
                             
                         </td>
