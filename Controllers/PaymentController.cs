@@ -348,13 +348,13 @@ namespace FirstApp.Controllers
 
                         var Text = "";
 
-                        if (transaction.Service.Key == "kedco" && transaction.PaymentPlan.Key == "prepaid")
+                        if (transaction.Service.Key == "kedco" && transaction.PaymentPlan.ServicePlan.Key == "prepaid")
                         {
                             Text = $"Your KEDCO token is {transaction.TransactionToken}. Thank you for using Biller.NG";
                         }
                         else
                         {
-                            Text = $"Your transaction for {transaction.Service.Name} {transaction.PaymentPlan.Name} {transaction.CustomerId} is completed Successful. Thank you for using Biller.NG";
+                            Text = $"Your transaction for {transaction.Service.Name} {transaction.PaymentPlan.ServicePlan.Name} {transaction.CustomerId} is completed Successful. Thank you for using Biller.NG";
 
                         }
                         var SMSResponse = _smartSMS.SendSMS(Text, transaction.PhoneNumber);
@@ -389,7 +389,7 @@ namespace FirstApp.Controllers
                         return StatusCode(500);
                     }
                     if(transaction.User !=null){
-                        
+
                         transaction.User = new ApplicationUser
                         {
                             Id = transaction.User.Id,

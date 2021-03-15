@@ -366,9 +366,9 @@ namespace FirstApp.Controllers
                         worksheet.Cell(currentRow, 3).Value = "N/A";
                         worksheet.Cell(currentRow, 4).Value = "N/A";
                         worksheet.Cell(currentRow, 5).Value = "N/A";
-                        worksheet.Cell(currentRow, 6).Value = transaction.PaymentPlan.Key == "postpaid" ? transaction.CustomerId : "N/A";
-                        worksheet.Cell(currentRow, 7).Value = transaction.PaymentPlan.Key == "prepaid" ? transaction.CustomerId : "N/A";
-                        worksheet.Cell(currentRow, 8).Value = transaction.PaymentPlan.Key;
+                        worksheet.Cell(currentRow, 6).Value = transaction.PaymentPlan.ServicePlan.Key == "postpaid" ? transaction.CustomerId : "N/A";
+                        worksheet.Cell(currentRow, 7).Value = transaction.PaymentPlan.ServicePlan.Key == "prepaid" ? transaction.CustomerId : "N/A";
+                        worksheet.Cell(currentRow, 8).Value = transaction.PaymentPlan.ServicePlan.Key;
                         worksheet.Cell(currentRow, 9).Value = transaction.Amount - transaction.Commission;
                         worksheet.Cell(currentRow, 10).Value = transaction.Commission;
                         worksheet.Cell(currentRow, 11).Value = transaction.Amount;
@@ -386,7 +386,7 @@ namespace FirstApp.Controllers
                         worksheet.Cell(currentRow, 5).Value = Convert.ToString(json?.customer?.tariff);
                         worksheet.Cell(currentRow, 6).Value = Convert.ToString(json?.customer?.accountNumber);
                         worksheet.Cell(currentRow, 7).Value = Convert.ToString(json?.customer?.meterNumber);
-                        worksheet.Cell(currentRow, 8).Value = transaction.PaymentPlan.Key;
+                        worksheet.Cell(currentRow, 8).Value = transaction.PaymentPlan.ServicePlan.Key;
                         worksheet.Cell(currentRow, 9).Value = transaction.Amount - transaction.Commission;
                         worksheet.Cell(currentRow, 10).Value = transaction.Commission;
                         worksheet.Cell(currentRow, 11).Value = transaction.Amount;

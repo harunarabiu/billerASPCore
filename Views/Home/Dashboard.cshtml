@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<FirstApp.Models.Transaction>
+@using Newtonsoft.Json;
+@using System.Globalization;
 @{
     Layout = "_Dashboard";
 }
@@ -10,15 +12,14 @@
 @*@await (Component.InvokeAsync<FirstApp.ViewComponents.Statistics>())*@
 
 @{
-    var amountTotal = Model.Sum(x => x.Amount);
-    var amountTotalToday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.Date).Sum(x => x.Amount);
-    var amountTotalYesterday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.AddDays(-1).Date).Sum(x => x.Amount);
-    var amountReceivable = Model.Sum(x => x.Amount) * (0.035);
-    var amountReceivableToday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.Date).Sum(x => x.Amount) * (0.035);
-    var amountReceivableYesterday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.AddDays(-1).Date).Sum(x => x.Amount) * (0.035);
-    var amountPayable = Model.Sum(x => x.Amount) - amountReceivable;
-    var amountPayableToday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.Date).Sum(x => x.Amount) - amountReceivableToday;
-    var amountPayableYesterday = Model.Where(x => x.CreatedAt.Date == DateTime.Now.AddDays(-1).Date).Sum(x => x.Amount) - amountReceivableYesterday;
+    var transactionByMonth = Model.Where(x => x.Status == "Success").GroupBy(x => new { Month = x.CreatedAt.Month}).Select(g => new { Month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(g.Key.Month), totalAmountMonth = g.Select(x => x.Amount).Sum() });
+
+    List<string> months = new List<string>();
+    List<double> totalAmountMonths = new List<double>();
+    foreach(var group in transactionByMonth){
+        months.Add(group.Month);
+        totalAmountMonths.Add(group.totalAmountMonth);
+    }
 }
 <nav class="breadcrumb is-small" aria-label="breadcrumbs">
     <ul>
@@ -75,10 +76,10 @@ else
         const chart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['February'],
+                labels: @Json.Serialize(months),
                 datasets: [{
-                    label: '# monthly transactions',
-                    data: [ @amountTotal],
+                    label: '#monthly transactions',
+                    data: @Json.Serialize(totalAmountMonths),
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
