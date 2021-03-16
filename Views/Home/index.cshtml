@@ -372,8 +372,10 @@
         <h3>Your Payment was Successful!</h3>
         <div id="tokencontainer">
             <span>Here is your Token.</span>
-            <div class="notification is-warning">
+            <div class="notification is-warning tooltip" onclick="copyToken()">
                 <span class="token" id="receiptrechargetoken">1234  5678  9012  3456  7890</span>
+                <span style="display:block; font-size: 11px;" id="clickcopy">click or tap to copy Token</span>
+            </button>
             </div>
         </div>
         <p>Your Transaction Ref is <span id="receipttransactionid" class="has-text-weight-bold">BLR-2431029</span></p>
@@ -436,7 +438,9 @@
 
 
 @section script {
-    <script>var customername = "";
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <script>
+        var customername = "";
         var transactionRef = "";
         var paymentPlan = "";
         var EMAIL = "";
@@ -695,7 +699,19 @@
                 $("#card").html(detail);
             });;
 
-        }</script>
+        };
+        function copyToken() {
+            var copyText = $("#receiptrechargetoken").html();
+            var textArea = document.createElement("textarea");
+            textArea.value = copyText
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("Copy");
+            $("#clickcopy").html("copied")
+            console.log("copied")
+            textArea.remove();
+        }
+</script>
 
     <environment names="Production">
         <script type="text/javascript" src="https://api.glade.ng/checkout.js"></script>

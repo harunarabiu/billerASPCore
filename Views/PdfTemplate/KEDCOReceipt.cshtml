@@ -145,7 +145,7 @@
                                                     @Model.Address
                                                 </td>
                                             </tr>
-                                            @if (Model.PaymentPlan.Key == "prepaid")
+                                            @if (Model.PaymentPlan.ServicePlan.Key == "prepaid")
                                             {
                                                 <tr>
                                                     <td width="30%">Meter Number</td>
