@@ -112,11 +112,19 @@ namespace FirstApp.Controllers
                 });
                 _DB.SaveChanges();
             }
-           
-
-            
-
             return RedirectToAction("users", "Account", new { id = request.UserId});
+        }
+
+        [Route("users/payment/plan/delete/{Id}")]
+        [HttpGet]
+        public IActionResult DeleteUserPaymentPlan(int Id)
+        {
+
+            var plan = _DB.CustomerPaymentPlans.FirstOrDefault(x => x.Id == Id);
+            _DB.CustomerPaymentPlans.Remove(plan);
+            _DB.SaveChanges();
+            
+            return Redirect(Request.Headers["Referer"].ToString());
         }
 
         [Route("users/wallet/fund")]

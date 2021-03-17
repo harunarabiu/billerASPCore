@@ -1,5 +1,5 @@
 @model FirstApp.Models.ViewModels.UserAccountVM
-
+@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
 @{
 
     Layout = "_Dashboard";
@@ -191,7 +191,7 @@
                         <td><span class="tag is-info">@plan.PaymentPlan.Status</span></td>
 
                         <td>
-                            <a class="button is-danger is-small">
+                            <a class="button is-danger is-small" onclick="return confirm('Are you sure you delete this?')" asp-action="DeleteUserPaymentPlan" asp-route-Id="@plan.Id">
                                 <span class="icon is-small"> <i class="fa fa-trash"></i> </span><span>Delete</span>
                             </a>
                         </td>
