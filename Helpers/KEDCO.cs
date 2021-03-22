@@ -45,8 +45,14 @@ namespace FirstApp.Helpers
         {
 
             bool isPostPaid = false;
-            if (paymentPlan.ToLower() == "postpaid")
-                isPostPaid = true;
+            string referenceType = "meter";
+
+            if (paymentPlan.ToLower() == "postpaid"){
+               isPostPaid = true;
+               referenceType = "accountnumber"; 
+            }
+                
+                
 
             var response = new IdentificationRequest();
             try
@@ -55,7 +61,7 @@ namespace FirstApp.Helpers
                 //var token = await GetToken();
 
 
-                response = await _kedcoAPI.Identification(customerId: customerId, isPostPaid: isPostPaid, accessToken: ACCESS_TOKEN, merchantId: MERCHANT_ID) ;
+                response = await _kedcoAPI.Identification(customerId: customerId, accessToken: ACCESS_TOKEN, merchantId: MERCHANT_ID, referenceType: referenceType, isPostPaid: isPostPaid) ;
 
             }
 

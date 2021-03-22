@@ -309,7 +309,7 @@ namespace FirstApp.Controllers
 
                     try {
                         //return StatusCode(500);
-                        var _payment = await _kedco.Payment(transaction.CustomerId, transaction.Amount, transaction.PaymentPlan.Key);
+                        var _payment = await _kedco.Payment(transaction.CustomerId, transaction.Amount, transaction.PaymentPlan.ServicePlan.Key);
 
                         var payment = new KEDCOPaymentReponse
                         {

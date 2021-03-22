@@ -15,7 +15,7 @@ namespace FirstApp.Services
 
         //{merchantcode}/{CustomerIdentifier}/{accesstoken}?referencetype=accountnumber?postpaid={true}
         [Get("/Identification/{merchantId}/{customerId}/{accessToken}?referencetype={referenceType}&postpaid={isPostPaid}")]
-        Task<IdentificationRequest> Identification (string customerId, string merchantId = "130", string accessToken = "AA4148ED5A2B3DBD362A61D734B63FEB", bool isPostPaid=false, string referenceType="meter");
+        Task<IdentificationRequest> Identification (string customerId, string merchantId = "130", string accessToken = "AA4148ED5A2B3DBD362A61D734B63FEB", string referenceType="meter", bool isPostPaid=false);
 
         //{merchantId}/{Password}
         [Post("/auth/{merchantId}/{Password}")]

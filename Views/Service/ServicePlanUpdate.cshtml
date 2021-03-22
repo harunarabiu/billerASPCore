@@ -1,0 +1,166 @@
+@model FirstApp.Models.ViewModels.ServicePlanVM
+@addTagHelper "*, Microsoft.AspNetCore.Mvc.TagHelpers"
+@{
+    Layout = "_Dashboard";
+}
+
+@section Title {
+<title>Biller.ng - Service </title>
+}
+
+
+
+<nav class="breadcrumb is-small" aria-label="breadcrumbs">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li class="is-active"><a href="#" aria-current="page">Service</a></li>
+    </ul>
+</nav>
+
+<div class="level mt-2 mr-2 content-title">
+    <div class="level-left">
+        <div class="level-item">
+            <div class="title has-text-primary">
+
+
+                <span>Service Plan</span>
+            </div>
+        </div>
+    </div>
+    <div class="level-right">
+        <div class="level-item">
+            @*<button type="button" class="button is-small">March 8, 2017 - April 6, 2017</button>*@
+        </div>
+    </div>
+</div>
+
+
+
+
+        @*<a class="button is-link">
+    <span class="icon is-small"> <i class="fa fa-plus"></i> </span><span>Add New </span>
+</a>*@
+
+
+<div class="content">
+
+
+    <div class="columns">
+        <div class="column">
+
+        </div>
+        <div class="column is-three-fifths">
+            <div class="card">
+                <div class="card-content">
+                    <form role="form" asp-controller="Service" asp-action="ServicePlanUpdate" method="post">
+
+                        <div asp-validation-summary="ModelOnly" class="notification is-danger"></div>
+                        <input  type="hidden" asp-for="Plan.Id" value="@Model.Plan.Id">
+                        <div class="field">
+                            <label asp-for="Plan.Name" class="label"></label>
+                            <div class="control">
+                                <input asp-for="Plan.Name" class="input" placeholder="Service Plan">
+                            </div>
+                            <span asp-validation-for="Plan.Name" class="help is-danger"></span>
+                        </div>
+
+                        <div class="field">
+                            <label asp-for="Plan.Service" class="label"></label>
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select asp-for="Plan.ServiceId">
+                                        <option>Select Service</option>
+                                        @foreach (var service in Model.Services)
+                                        {
+                                            if(service.Id == Model.Plan.Service.Id){
+                                                <option value="@service.Id" selected>@service.Name</option>
+                                            }  else { 
+                                                <option value="@service.Id" >@service.Name</option>
+                                            }
+                                        }
+                                        
+                                        </select>
+                                    </div>
+
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label asp-for="Plan.Price" class="label"></label>
+                            <div class="control">
+                                <input asp-for="Plan.Price" class="input"  placeholder="Price">
+                            </div>
+                            <span asp-validation-for="Plan.Price" class="help is-danger"></span>
+                        </div>
+                        
+                        <div class="field">
+                            <label asp-for="Plan.ConvienceFee" class="label"></label>
+                            <div class="control">
+                                <input asp-for="Plan.ConvienceFee" class="input"  placeholder="Convience Fee">
+                            </div>
+                            <span asp-validation-for="Plan.ConvienceFee" class="help is-danger"></span>
+                        </div>
+                        <div class="field">
+                            <label asp-for="Plan.Commission" class="label"></label>
+                            <div class="control">
+                                <input asp-for="Plan.Commission" class="input"  placeholder="Commission">
+                            </div>
+                            <span asp-validation-for="Plan.Commission" class="help is-danger"></span>
+                        </div>
+
+                        <div class="field">
+                            <label asp-for="Plan.CommissionType" class="label"></label>
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select asp-for="Plan.CommissionType">
+                                        <option>Select Service</option>
+                                        <option value="Variable">Variable</option>
+                                        <option value="Fixed">Fixed</option>
+                                    </select>
+                                    </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label asp-for="Plan.Status" class="label"></label>
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select asp-for="Plan.Status">
+                                        <option>Select Status</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                    </div>
+                            </div>
+                        </div>
+
+
+                        
+                        <div class="field">
+                            <div class="control">
+                                    <label class="checkbox" >
+                                <input type="checkbox" asp-for="Plan.IsDefault">
+                                Is Default
+                            </label>
+                            </div>
+                            
+
+                        </div>
+                        
+
+                        <div class="field is-grouped is-pulled-right">
+                            <div class="control">
+                                <button class="button is-primary">Save</button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+
+        </div>
+
+    </div>
+</div>

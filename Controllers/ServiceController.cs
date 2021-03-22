@@ -121,6 +121,42 @@ namespace FirstApp.Controllers
             return View(servicePlans);
         }
 
+        [Route("plan/{Id}")]
+        [HttpGet]
+        public IActionResult ServicePlanUpdate(int Id)
+        {
+        
+            var servicePlan = _DB.ServicePlans.FirstOrDefault(x => x.Id == Id);
+            var services = _DB.Services.ToList();
+
+            var editModel = new ServicePlanVM {
+                Services = services,
+                Plan = servicePlan
+            };
+
+            return View(editModel);
+        }
+
+        [HttpPost]
+        [Route("plan/{Id}")]
+        public IActionResult ServicePlanUpdate(ServicePlan plan)
+        {
+            _logger.LogError(string.Empty, plan);
+            _DB.ServicePlans.Update(plan);
+            _DB.SaveChanges();
+
+           
+            var services = _DB.Services.ToList();
+
+            var editModel = new ServicePlanVM {
+                Services = services,
+                Plan = plan
+            };
+
+           
+            return View(editModel);
+        }
+
         [Route("plan/data")]
         [HttpGet]
         public IActionResult ServicePlanData()
