@@ -113,20 +113,17 @@ namespace FirstApp.Controllers
             });
         }
 
-        [Route("plan")]
-        [HttpPost]
-        public IActionResult ServicePlan()
-        {
-            var servicePlans = _DB.ServicePlans.ToList();
-            return View(servicePlans);
-        }
-
-        [Route("plan/{Id}")]
-        [HttpGet]
-        public IActionResult ServicePlanUpdate(int Id)
-        {
         
-            var servicePlan = _DB.ServicePlans.FirstOrDefault(x => x.Id == Id);
+
+        [Route("plan")]
+        [HttpGet]
+        public IActionResult ServicePlanUpsert(int? Id)
+        {
+            var servicePlan = new ServicePlan();
+            if(Id != 0){
+                servicePlan = _DB.ServicePlans.FirstOrDefault(x => x.Id == Id);
+            }
+          
             var services = _DB.Services.ToList();
 
             var editModel = new ServicePlanVM {
@@ -138,12 +135,23 @@ namespace FirstApp.Controllers
         }
 
         [HttpPost]
-        [Route("plan/{Id}")]
-        public IActionResult ServicePlanUpdate(ServicePlan plan)
+        [Route("plan")]
+        public IActionResult ServicePlanUpsert(ServicePlan plan)
         {
             _logger.LogError(string.Empty, plan);
-            _DB.ServicePlans.Update(plan);
-            _DB.SaveChanges();
+
+            if(plan.Id != 0){
+
+                 _DB.ServicePlans.Update(plan);
+                _DB.SaveChanges();
+
+            } else {
+
+                _DB.ServicePlans.Add(plan);
+                _DB.SaveChanges();
+
+            }
+           
 
            
             var services = _DB.Services.ToList();
@@ -169,6 +177,66 @@ namespace FirstApp.Controllers
                 data = servicePlans
             });
         }
+        [Route("payment/plan/create")]
+        [HttpGet]
+        public IActionResult ServicePlanCreate()
+        {
+        
+            var servicePlans = _DB.ServicePlans.ToList();
+
+            var editModel = new PaymentPlanUpsertVM {
+                Plan = new PaymentPlan(),
+                ServicePlans = servicePlans
+            };
+
+            return View("~/Views/Service/PaymentPlanUpsert.cshtml", editModel);
+        }
+
+        [Route("payment/plan")]
+        [HttpGet]
+        public IActionResult PaymentPlanUpsert(int? Id)
+        {
+            var plan = new PaymentPlan();
+
+            if(Id != 0){
+                plan = _DB.PaymentPlans.FirstOrDefault(x => x.Id == Id);
+            }
+            
+            var servicePlans = _DB.ServicePlans.ToList();
+
+            var editModel = new PaymentPlanUpsertVM {
+                Plan = plan,
+                ServicePlans = servicePlans
+            };
+
+            return View("~/Views/Service/PaymentPlanUpsert.cshtml", editModel);
+        }
+        
+        [Route("payment/plan")]
+        [HttpPost]
+        public IActionResult PaymentPlanUpsert(PaymentPlan plan)
+        {
+            _logger.LogError(string.Empty, plan);
+            if(plan.Id == 0){
+                _DB.PaymentPlans.Add(plan);
+                _DB.SaveChanges();
+            } else {
+                _DB.PaymentPlans.Update(plan);
+                _DB.SaveChanges();
+            }
+           
+
+           
+            var servicePlans = _DB.ServicePlans.ToList();
+
+            var editModel = new PaymentPlanUpsertVM {
+                ServicePlans = servicePlans,
+                Plan = plan
+            };
+
+           
+            return View("~/Views/Service/PaymentPlanUpsert.cshtml", editModel);
+        }
 
         [Route("payment/plan/data")]
         [HttpGet]
@@ -185,13 +253,6 @@ namespace FirstApp.Controllers
             
         }
 
-        [Route("payment/plan/")]
-        [HttpGet]
-        public IActionResult PaymentPlan()
-        {
-
-            var paymentPlans = _DB.PaymentPlans.ToList();
-            return View(paymentPlans);
-        }
+       
     }
 }

@@ -41,7 +41,7 @@ namespace FirstApp.Controllers {
         }
 
         [HttpGet]
-        [Route("")]
+        [Route("hidden")]
         public IActionResult Index(){
             return View();
         }

@@ -52,10 +52,13 @@
         <div class="column is-three-fifths">
             <div class="card">
                 <div class="card-content">
-                    <form role="form" asp-controller="Service" asp-action="ServicePlanUpdate" method="post">
+                    <form role="form" asp-controller="Service" asp-action="ServicePlanUpsert" method="post">
 
                         <div asp-validation-summary="ModelOnly" class="notification is-danger"></div>
-                        <input  type="hidden" asp-for="Plan.Id" value="@Model.Plan.Id">
+                        @if(Model.Plan?.Id != 0){
+                            <input  type="hidden" asp-for="Plan.Id" value="@Model?.Plan?.Id">
+                        }
+                        
                         <div class="field">
                             <label asp-for="Plan.Name" class="label"></label>
                             <div class="control">
