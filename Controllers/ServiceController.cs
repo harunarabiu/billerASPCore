@@ -115,7 +115,7 @@ namespace FirstApp.Controllers
 
         
 
-        [Route("plan")]
+        [Route("plan/{Id?}")]
         [HttpGet]
         public IActionResult ServicePlanUpsert(int? Id)
         {
@@ -192,7 +192,7 @@ namespace FirstApp.Controllers
             return View("~/Views/Service/PaymentPlanUpsert.cshtml", editModel);
         }
 
-        [Route("payment/plan")]
+        [Route("payment/plan/{Id?}")]
         [HttpGet]
         public IActionResult PaymentPlanUpsert(int? Id)
         {
